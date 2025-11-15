@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AURA - Modern Luxury Footwear</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "foreground-light": "#ffffff",
+                        "foreground-dark": "#181e29",
+                        "text-light": "#111318",
+                        "text-dark": "#f6f6f8",
+                        "text-muted-light": "#636f88",
+                        "text-muted-dark": "#a1a1aa"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<!-- Header / Navbar -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap px-4 sm:px-10 lg:px-20 py-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
+<div class="flex items-center gap-4">
+<div class="size-6 text-text-light dark:text-text-dark">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path></svg>
+</div>
+<h1 class="text-xl font-bold tracking-[-0.015em]">AURA</h1>
+</div>
+<nav class="hidden lg:flex flex-1 justify-center items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">All Sneakers</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">New Arrivals</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">New Releases</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Custom &amp; Unreleased</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Jordan</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">More Footwear</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 lg:hidden">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">Login</span>
+</button>
+</div>
+</header>
+<main class="flex flex-col">
+<!-- Hero Section -->
+<section class="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
+<div class="flex overflow-x-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden snap-x snap-mandatory">
+<div class="flex items-stretch p-2 gap-6">
+<div class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col" data-alt="A stylish white sneaker with blue accents on a minimalist background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDObCgFQMPVhg53clAD8zGAQX_ZRnfVykOpof_pHW0oDAC1T3awIBS40Z8BowjoHcBgnLt_dAFJiefVFieamxxleTq-NYtyem8iyd5KlZoCs6psBKwt2XGxrp2gHMfHQFV9pJfD-FpwfOdumALrDKENFfkTC26gPCxglGj8n6jdGJ68MxX6-IL1TvHwbaXRYtmzyhO2LiRESMcrwebdHAwf6-CzJXoEsmRAmbwwCyWkN8nOKV1um_KHutznOzhnhGH36Vt811GArtw");'></div>
+<div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+<div>
+<p class="text-base font-semibold">The Vertex Collection</p>
+<p class="text-sm text-text-muted-light dark:text-text-muted-dark">Discover the Pinnacle of Modern Design</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+<span class="truncate">Shop Now</span>
+</button>
+</div>
+</div>
+<div class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col" data-alt="A pair of sleek black running shoes with white soles" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAIDofSqXo7iwTcus55-Adhszsv9wo6f2fk4RgEwX--tR6IMIHLu97yxadDGq7MowNktm23hdcyBBrhp1meZ5gfdt9-zWB2CL1EKUsXZJ6f7O12HaDc6y4M1U9fauNLRjRTZLdOLzJBREr2gmrdbSOHArc3SQ0rk8vpLNx8Eqt8X945euKbGglAPOVGKKv9M6XJeNljG19xOzThpNq0sPN5Ug7ecAZsBLTDe8Cztf3_syY39qTowwVzGZT5HRLcIo7RIUsRX6vLTJY");'></div>
+<div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+<div>
+<p class="text-base font-semibold">Nova Runner Series</p>
+<p class="text-sm text-text-muted-light dark:text-text-muted-dark">Engineered for the Urban Explorer</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+<span class="truncate">Shop Now</span>
+</button>
+</div>
+</div>
+<div class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col" data-alt="A limited edition high-top sneaker with unique color patterns" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAU0CY6NjT4fCFKWDyXVQ8Plf_5uoETXHv7nFimmlWMmotfYJQriQN2CBmoHF7tmJ0PmAf3HmV9RH0vIrx4kYXkJuDDqpa9YSmLDo6xkP7wikgSgq4k2OBtG_e6NvzxapCqyTPrGzAI2EQTXZsgxWA_6g_tj0uldfV6aLUhfHnwqdZSi81QWrapFUMrI4RKkN1J-g9DGJG6dWap4Wr39yVNPj0fKTqD5DbUcnXQA3VJNT9N2xMxqOJrk7PB8hjyC_hlpIE184tsVPU");'></div>
+<div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+<div>
+<p class="text-base font-semibold">Ascend Limited Edition</p>
+<p class="text-sm text-text-muted-light dark:text-text-muted-dark">Exclusivity Redefined in Every Step</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+<span class="truncate">Shop Now</span>
+</button>
+</div>
+</div>
+<div class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col" data-alt="Classic brown leather shoe" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDxxDaYnp4Av3awuwCjeN0tqQ0Rg6mAifF8NSjF5KV8_pGAcCko2IlRCzQn_vPT8AsnD6x5ZbxImvo7ljAQUMNFSjJNq7QMdlIZFuuH4b2QY-UFjXTs3uaAEsEOYtAQVJFkNLMv6y8mFP1Nje2PU97-SEYPhGBPBD1Pi5Kwh8suovqmdKEZdbo-AZG2cey7dDz-5cmxX37lNHlAHCpqOdMT5rkCx6tZW6ygbMfc8O3OtNZrU9GnTU_c07fnuF2qeUAzNcfITz2XcgM");'></div>
+<div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+<div>
+<p class="text-base font-semibold">Heritage Craft</p>
+<p class="text-sm text-text-muted-light dark:text-text-muted-dark">Timeless Style, Unmatched Quality</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+<span class="truncate">Shop Now</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- "Hot Right Now" Section -->
+<section class="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
+<h2 class="text-2xl sm:text-3xl font-bold tracking-tight px-4 pb-6">Hot Right Now</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-6 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] group" data-alt="A person wearing chunky sole sneakers walking on a city street" style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZArQirr2R-Xn_6a3qmh-jCbC0P1WvOgzcMRSgRCXRmw7AvFsM__3Gxsy1aGuKzwqG3h69TelvM_iNUQQTvzewdf2VJ6hci72EybQ2O13qPj7EkzhLrH94yJyidLjS-5TJFfg4YxJIc7l7iUb3e8AzgPW4dSYxXRi4aORB9D0vg7JZTbUBG2xSAZN5BWagam6FYRixWJnYIpsJItF8BnA1FWYekxCd0VVXpWTe8eN2mdYLe2_ok1Hn86YwmTevSvfJ8fPpaeOcIG0");'>
+<p class="text-white text-xl font-bold leading-tight transform group-hover:translate-y-[-8px] transition-transform duration-300">The Chunky Sole Edit</p>
+</div>
+<div class="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-6 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] group" data-alt="A pair of white minimalist high-top sneakers against a concrete wall" style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDNMMrcJYmeQRHnpyFiKlhpl7vk8ry8Xi9bIeItdygPtlEDifIVeWPZPdQhuL-F-a4HJjC5DRUt_l9Glt1sncoD3naKji5NR9aNRv9XX1F5TMX183Cdyrs2di0b74N9jBKzRCqMPd-_F46F4uXNBBN8lxbgEVQFBvudqH6jSi_AiXAnpV0T7hOVVTPLY7nW01HBZL8PsNNKM5ecN13X_AX1RzL6Km4g8dppWjfWNivYi0hqLGaf8IpuJS5kErWX-AGl7l-fEtZtcro");'>
+<p class="text-white text-xl font-bold leading-tight transform group-hover:translate-y-[-8px] transition-transform duration-300">Minimalist High-Tops</p>
+</div>
+<div class="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-6 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] group" data-alt="Close-up on the side of a colorful retro runner sneaker" style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAAo4m08Q5nou8YgL0Mne7eJL0aZOZ5yXs36sBT_y47xE1YHEaU0zKHSzrDPxSbRR6qsj47hP073kJWpkFpjQjN9LK77jsGitnWGd3dPgxum5IVG7mBPSrzpJNKXj8nDWfOokEQMaKiFk7T1ZtQX9pdVs5tTXTVKsBhvSd3Eor_pyHFZ_fUYY2dyunTJSqGEkUxQr2qyjAr3ILv0Bbc2DVd5B9Tgvs8EyDvQLmJc1zumwNAlsW_ux5wIEocCrspa1DDb_JSAM34_f0");'>
+<p class="text-white text-xl font-bold leading-tight transform group-hover:translate-y-[-8px] transition-transform duration-300">Retro Runners</p>
+</div>
+</div>
+</section>
+<!-- Banner / Promo Section -->
+<section class="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
+<div class="@container">
+<div class="bg-cover bg-center flex flex-col justify-end overflow-hidden min-h-[300px] sm:min-h-[400px] rounded-xl" data-alt="Artistic close-up shot of a beige sneaker showing texture and material details" style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 35%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuADtpo7l4d56IBJbGfFQjXJvKu4_nnJ1bC9ei8HWy5W5Hn6xiIM4V8DGMoS-hlSPbVJrNibuPheFt7LFPUutn8EwM0txUMcYw2c1cDQpL_K5a2R7EYyjDCU2vJLFvlsr8x_BZiM-l7INqbsrGMxcKjioFUfftHuajie_AqAPxP_D4BeEXvUu0kdsxevdihZzNKmn8N5scwLYlWB4qjvSXL5k3QnVs9Zir_-AIYATV8JHwNLtrOnNGl6vXFbBsldH2LB4h16yw90p5Y");'>
+<div class="flex flex-col p-6 sm:p-10 gap-4">
+<h3 class="text-white text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight max-w-xl">New Collection Arriving This Fall</h3>
+<p class="text-gray-200 text-base sm:text-lg max-w-lg">Experience the next wave of design innovation. Timeless aesthetics meet cutting-edge comfort.</p>
+<div class="pt-2">
+<button class="flex min-w-[84px] max-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-white text-text-light text-base font-bold leading-normal tracking-[0.015em] hover:bg-gray-200 transition-colors">
+<span class="truncate">Explore Now</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Best Selling Section -->
+<section class="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
+<h2 class="text-2xl sm:text-3xl font-bold tracking-tight px-4 pb-6">Best Selling</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+<div class="group">
+<div class="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800/50 aspect-square">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A pair of stylish tan and white sneakers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAj8QBvbI2UJI2AkLf16lfSG28h0YhFc3chlGML2oqEwzHXwBFypmj2LsMthfUH5YbRdEVgopK5_FytsQSDVuhzOA8PaaE5paggEdA8bofyVKjh9gmEp2OBScwZ4LizkLJ_MZ3XFa23kJzyMr-PZ-FjAtA7_6Py1YindWNB9g4MbLq20Y4-0pk9WSrlbLvn3QpyWE-UUqoLrv3m9P2yCHbsp3K5eM3VCflS30a7CABZSm6EC7NDrhyYedAHJrh-DCny2ahjQvsB-UY"/>
+</div>
+<div class="pt-4">
+<h4 class="font-semibold">Aura Classic Low</h4>
+<p class="text-text-muted-light dark:text-text-muted-dark">$180.00</p>
+</div>
+</div>
+<div class="group">
+<div class="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800/50 aspect-square">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A colorful athletic sneaker with red, white, and blue tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4b7jrPtANBt4N1poSHsG_fF0tEGqY9SpaAoRWcuta7Uvc9a40OaWs78-2LT-B22F_p2QLSgfsNpYMDzuYz_juDjDbbmu_wjBRYgPobM2rOoXP42guBLghWfZs71OwXN-wVIKxVHiHBnsjn9rKoHhwY7wDhbvo6y0HF-SyWd351Qn8poq4AG08dS9TXlGVuoG5-YNDn6kt9YSTSp_HIkj-hc4ntiffKm9EWb1y667irdXyn2GWpnTaVEvd2sCdX8fVBX0fdWaLf_A"/>
+</div>
+<div class="pt-4">
+<h4 class="font-semibold">Velocity Runner</h4>
+<p class="text-text-muted-light dark:text-text-muted-dark">$220.00</p>
+</div>
+</div>
+<div class="group">
+<div class="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800/50 aspect-square">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A white high-top sneaker with a clean design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaB_2s9MYZxAjJKlvExn7j77UY6bUQJW5LaGhYKRZ7UnfcYdpL81TLyKRUpB_JgDFe35sjTPCN9Vv5FQ6l05MQq1uVIk2QXxeai9PSFuqWcRMOqIX3mBrv5jsVMRW3LJk3MA-Pz_Tug1JbT2qyIOWwwFLpGvwdfpP2hjt17QwWbYlO84GQdUefmmMXboBq7HhPzH8288rVSONgepxZUbIeSEmSrpwNc_RP8rTT8iBug1ZJMb5ZiwvADKf8s0pbtRCn1eesxE_BoSU"/>
+</div>
+<div class="pt-4">
+<h4 class="font-semibold">Stratus High-Top</h4>
+<p class="text-text-muted-light dark:text-text-muted-dark">$250.00</p>
+</div>
+</div>
+<div class="group">
+<div class="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800/50 aspect-square">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A sleek all-black sneaker on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAw6IJaYk3imu8UBN9fjqCpCf1Yo0a3ALuMFrfB886UmHit4rdYsbvYucypxRuIPKYPSA1XXkKNiD74snGBKoYcboEGQq1ftQHvcSkii3bIIOpBwl8d44Rf2xWavd-GLOkmDnhTcqkg8CoMDMmgP7CaXQLhGk5k1KKSv4KXyjfxUKiLH6lJhKQrxFnUtOYy5P-tdc0TcwFZTF1xZzErO_ONJtdsWMpAAzC0VQZ3EKhWoVveUDKPTruGjzjdOkpVFGM9daX3ovyVs64"/>
+</div>
+<div class="pt-4">
+<h4 class="font-semibold">Eclipse Midnight</h4>
+<p class="text-text-muted-light dark:text-text-muted-dark">$195.00</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Reviews Section -->
+<section class="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16 bg-foreground-light dark:bg-foreground-dark">
+<h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-center pb-8">What Our Customers Say</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+<div class="flex flex-col items-center text-center p-6 rounded-xl">
+<div class="flex pb-2">
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+</div>
+<blockquote class="italic text-text-muted-light dark:text-text-muted-dark">"The quality is unreal. Feels like walking on clouds, but looks like a piece of art."</blockquote>
+<p class="font-bold pt-4">- Alex J.</p>
+</div>
+<div class="flex flex-col items-center text-center p-6 rounded-xl">
+<div class="flex pb-2">
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+</div>
+<blockquote class="italic text-text-muted-light dark:text-text-muted-dark">"Absolutely in love with my Velocity Runners. I get compliments everywhere I go."</blockquote>
+<p class="font-bold pt-4">- Maria S.</p>
+</div>
+<div class="flex flex-col items-center text-center p-6 rounded-xl">
+<div class="flex pb-2">
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-variation-settings: 'FILL' 1">star</span>
+</div>
+<blockquote class="italic text-text-muted-light dark:text-text-muted-dark">"Customer service was fantastic and the shipping was surprisingly fast. 10/10 experience."</blockquote>
+<p class="font-bold pt-4">- Ben R.</p>
+</div>
+</div>
+</section>
+<!-- Feature Highlights Section -->
+<section class="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-24">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto text-center">
+<div class="flex flex-col items-center p-4">
+<div class="flex items-center justify-center size-12 mb-4 rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<h4 class="font-bold text-lg">Huge Product Range</h4>
+<p class="text-text-muted-light dark:text-text-muted-dark mt-1 text-sm">Explore hundreds of styles from exclusive collections to timeless classics.</p>
+</div>
+<div class="flex flex-col items-center p-4">
+<div class="flex items-center justify-center size-12 mb-4 rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">sell</span>
+</div>
+<h4 class="font-bold text-lg">Best Price</h4>
+<p class="text-text-muted-light dark:text-text-muted-dark mt-1 text-sm">We guarantee premium quality footwear at competitive prices.</p>
+</div>
+<div class="flex flex-col items-center p-4">
+<div class="flex items-center justify-center size-12 mb-4 rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<h4 class="font-bold text-lg">Quick Shipping</h4>
+<p class="text-text-muted-light dark:text-text-muted-dark mt-1 text-sm">Fast, reliable, and free shipping on all orders over $150.</p>
+</div>
+<div class="flex flex-col items-center p-4">
+<div class="flex items-center justify-center size-12 mb-4 rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">support_agent</span>
+</div>
+<h4 class="font-bold text-lg">Dedicated Support</h4>
+<p class="text-text-muted-light dark:text-text-muted-dark mt-1 text-sm">Our team is here to help you with any questions, 24/7.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-foreground-light dark:bg-foreground-dark border-t border-gray-200 dark:border-gray-800">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-20 py-16">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<div class="col-span-1 lg:col-span-4">
+<h4 class="font-bold text-lg mb-4">ABOUT US</h4>
+<p class="text-sm text-text-muted-light dark:text-text-muted-dark">AURA is the intersection of luxury, design, and culture. We are committed to crafting footwear that stands the test of time, both in style and quality.</p>
+<p class="text-sm text-text-muted-light dark:text-text-muted-dark mt-4">Contact: placeholder@aura.com</p>
+</div>
+<div class="col-span-1 lg:col-span-2">
+<h4 class="font-bold text-lg mb-4">INFORMATION</h4>
+<ul class="space-y-3">
+<li><a class="text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors" href="#">FAQs</a></li>
+<li><a class="text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors" href="#">Shipping Policy</a></li>
+<li><a class="text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+<div class="col-span-1 lg:col-span-2">
+<h4 class="font-bold text-lg mb-4">CUSTOMER SERVICE</h4>
+<ul class="space-y-3">
+<li><a class="text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors" href="#">Contact Us</a></li>
+<li><a class="text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors" href="#">Help Center</a></li>
+<li><a class="text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors" href="#">Track Your Order</a></li>
+<li><a class="text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors" href="#">Exchanges &amp; Returns</a></li>
+<li><a class="text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors" href="#">Referral Program</a></li>
+</ul>
+</div>
+<div class="col-span-1 lg:col-span-4 bg-background-light dark:bg-background-dark p-6 rounded-xl">
+<h4 class="font-bold text-lg">7% Welcome Discount</h4>
+<p class="text-sm text-text-muted-light dark:text-text-muted-dark mt-1 mb-4">Subscribe to our newsletter and get a special discount.</p>
+<form class="space-y-4">
+<input class="w-full h-10 px-3 text-sm border-gray-300 dark:border-gray-700 bg-foreground-light dark:bg-foreground-dark rounded-md focus:ring-primary focus:border-primary" placeholder="Enter your email address" type="email"/>
+<input class="w-full h-10 px-3 text-sm border-gray-300 dark:border-gray-700 bg-foreground-light dark:bg-foreground-dark rounded-md focus:ring-primary focus:border-primary" placeholder="Phone number (optional)" type="tel"/>
+<div class="flex items-start">
+<input class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary mt-0.5" id="sms-consent" type="checkbox"/>
+<label class="ml-2 text-xs text-text-muted-light dark:text-text-muted-dark" for="sms-consent">I consent to receive marketing SMS messages.</label>
+</div>
+<button class="w-full flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">Get Your Gift</span>
+</button>
+</form>
+</div>
+</div>
+<div class="text-center text-xs text-text-muted-light dark:text-text-muted-dark mt-16 border-t border-gray-200 dark:border-gray-800 pt-8">
+                     © 2024 AURA. All Rights Reserved. A luxury footwear experience.
+                 </div>
+</div>
+</footer>
+</div>
+</body></html>
