@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { db } from '../firebase'
-import { collection, getDocs, query, limit, orderBy, where } from 'firebase/firestore'
+import { collection, getDocs, query, limit, where } from 'firebase/firestore'
 
 export default function Home() {
   const [carouselItems, setCarouselItems] = useState<any[]>([]);
