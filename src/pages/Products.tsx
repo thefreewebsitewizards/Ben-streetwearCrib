@@ -1,76 +1,93 @@
-import { useParams } from 'react-router-dom'
-import { Link } from 'react-router-dom'
-export default function Products() {
-  const products = [
-    {
-      title: 'Aura-Glide Pro',
-      subtitle: 'Lifestyle Sneaker',
-      price: '$320',
-      alt: 'Red and black sports sneaker on a reflective surface',
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuByVcqSMAHPecLm4eQS9AdpE1R6VcNNr6QwiujgdD6zobfThfeuMBxGkDhh5c3SBvMMhIhBvqwTp4fzAMYU3Cq3rfTmVwuSrvvy4CQRk3N2sJEGV4puhhgiM297o2TyM52aqlV11kqk6ynQcHekhAFaMOXeVHQaxMDyMxeEuVAOxgrfRCtE0LbmQskctT8YUpcocw5dsF2rWvbdpZwg-xbiTwc_M0uQ1J5RuS10_xEh8312-K_ccJBjt99ARlJohddfGQA8YmIbWXY'
-    },
-    {
-      title: 'Zenith Runner',
-      subtitle: 'Performance Runner',
-      price: '$280',
-      alt: 'Pastel colored sneaker with chunky sole',
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCMQBi95xKZZB84IxCa0u0bc-CW-DEqltvFkOGt7GV1frjIYtC-2-_-R4DHMkDAPPk52kcKLOl0VbAahjjhHmX5cRCbO2mEfT_Y4_IAIZ9HZV45LNcK3bY_Uj1i_l1ZFDN2oiMt-0hmXzgj-60bW-RKaUzge82DEpKc3SXEK_i7CH0nhsrtQf4_Y7O2UeU5x3A6Xx4gJLAxtPE7mRTbxcHqaRtM5YomrmKVkn98ilcrUxn5pC0d0eMXFawQ9jbR3jTsz9Z1QseWWvo'
-    },
-    {
-      title: 'Apex Strider',
-      subtitle: 'Urban Explorer',
-      price: '$350',
-      alt: 'Classic black and white checkered sneaker',
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDRCEuvwO__Q6zav41qGwB-Hqn-5PPQ4OA0BLi3fAmbGO6EqMZU3bLn176s5zGT5tCx62oQfGyGQ-WMHNbS-8idKTsYbWqeTYeCYnLxEtER1SLfidQE5d9pmPglP2Z-EIpZt3UVe4yBzOwb1EGGukxzA34BrWMVsmKrhJRSfdYSMGpGQiho1uap1BMHUC6sO7t6IhHNPCCtwnH874OIEZbYYOHkuWy6jcEfmmgQtiZbYuCkgbn1KXfOE557tl9d1NkJz04_DEZgcJI'
-    },
-    {
-      title: 'Celeste Low-Top',
-      subtitle: 'Classic Court',
-      price: '$290',
-      alt: 'Pair of stylish white leather sneakers',
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQZ3nqRkzCNko6UcmeC6vLpyyADVyhRqCU1UY6T79OnJ7nuBWMtOEUWHXaMyRNSEKTRUjz1FGKkW3ko7iQr51OZE5kB-Imaq5tKzrTuFxe51Id8xBpjT3ioxrw28XusY5iFoTmZaOizfzmdpK-gzFWELJMc9go11jNyAevkD7JeTusZgws0xpmuNUR0_KiP1izphdx_Yl28q7XP2gK7-KO7tpJB5hCCLvrY09jzf59ox7MrBM31DlcWRkfgwEZlNnrtFcYrjWtDbA'
-    },
-    {
-      title: 'Nova-X Trainer',
-      subtitle: 'Cross-Training',
-      price: '$310',
-      alt: 'Colorful high-top basketball sneaker',
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCjz-g0U6jVVu8LE1MV8ojrzk5jl6SqgcWaCtF2kJCKAIxP8yUigmGmlMNYn0M-YWyWp0rak8150APV_RCpcpqAD5CE1rgNDrouOpvehJOZ1w4K86uILq2Ln8lJSPYOeMwYlTuG-pLDjPPR6S_19arEfU68MA-gh-LPjZToJHy3PSjVM5JdjyH9XCbYWyxSyIKAms0SZww0ooODSnI7SB5XQ78Uz1mzIXb2kmuRyTW-5GgtFUpEwHq32vP_aRYq7XwVmPWd73TzpUQ'
-    },
-    {
-      title: 'Orion High-Top',
-      subtitle: 'Fashion High-Top',
-      price: '$380',
-      alt: 'White and red retro high-top sneaker',
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCdy2toPkSQI6iYI6CIdtlFZhQ-yNgkAaJSEAzWU0XrpHWw-2r3GDbWglpqZLz00EBQG3pfoPNbV-UITus2Ueb8KL1b0IQP-iJO8RPOfn4bdMf0HF6RMUGMEHZhQOSonTOCVESfAumSVJUWpPRcwCv1KY5jSt5aKUOnj9izIVP8v5A7QB9u49nM9Y2Lqs3toYQimIFuUoyXqYqr_yAIM7ZIJzSVdH73sQOkORYw9gXxojYAF6vULtAGuzrvw9LOfCncpXZoTJs6HQw'
-    },
-    {
-      title: 'Vortex Fusion',
-      subtitle: 'Hybrid Sneaker',
-      price: '$330',
-      alt: 'Sleek black sneaker with white sole',
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBSznv8zFe8Fy76QDrSXCCRA1kDqQKQCzCt_bo66G8TYxOoXta4QTd5SPKHKZrDpBJMAl1KcoW2fnAp7bUgpOQbVXp13U5brnJ87Q5YEc6rHjHc5AS1I1hyXdj15PU0FaUjFHyKcdVmmESQ2vQ8ZBDAO2tsjhQXiCHkLyZqS25_jQayVTiE80fm3IBdXE_SHyFaFR6xNM7TAwuSn9pJLH9Qm40E6Jn3psk5OkYlSVpXSDjL9bQa_aBAKtAKkQKfiDCxtQmzCr-A118'
-    },
-    {
-      title: 'Solstice Sneaker',
-      subtitle: 'Summer Edition',
-      price: '$275',
-      alt: 'White and blue running shoe',
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBKrpeD2bH5ldsXQas2d9VDk3fbXz8OkFHR4N-EUHLSsLWxuFuFOeDLNoOX0F5ZXrpi-_eAuVEt-w5KyZh8r7P_2UlYnd2o43a0uuIIxcHl5WoJgl5wTw8t9lYxL1BSG7p8p4PFzdD9QuYNz8PXQ4pQKYx1OT5woiVW63Hqw8Ce2B6j-2wLvLakDt9ko5PX_Z-MK7FueLEYeuatriUW-D0MJsz6zQQCy1WjvRV9TBZHrDR3ccDMY4Jw-0qn-084fJL6cMUWInTFlH8'
-    }
-  ];
+import { useEffect, useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import { db } from '../firebase'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 
+interface Product {
+    id: string;
+    title: string;
+    subtitle: string;
+    price: string;
+    alt: string;
+    src: string;
+    category?: string;
+    categories?: string[];
+    description?: string;
+    shippingInfo?: string;
+    materialsCare?: string;
+    sizes?: string[];
+    images?: string[];
+    colors?: string[];
+    color?: string;
+    rating?: number;
+    reviewCount?: number;
+}
+
+export default function Products() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const { slug } = useParams<{ slug: string }>()
+  
   const displayNameBySlug: Record<string, string> = {
-    'all-sneakers': 'All Sneakers',
+    'all-products': 'All Products',
     'new-arrivals': 'New Arrivals',
     'new-releases': 'New Releases',
-    'custom-and-unreleased': 'Custom & Unreleased',
     'jordan': 'Jordan',
-    'more-footwear': 'More Footwear',
+    'nike': 'Nike',
+    'adidas': 'Adidas',
     'reviews': 'Reviews',
+    'hats': 'Hats',
+    'watches': 'Watches',
+    'shirts': 'Shirts',
+    'hoodies': 'Hoodies',
   }
-  const heading = (slug && displayNameBySlug[slug]) || 'All Sneakers'
+  const heading = (slug && displayNameBySlug[slug]) || 'All Products'
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+        setLoading(true);
+        try {
+            const productsRef = collection(db, 'products');
+            let q = query(productsRef);
+
+            if (slug && slug !== 'all-products' && displayNameBySlug[slug]) {
+                // Use array-contains to check if the category is in the categories array
+                q = query(productsRef, where('categories', 'array-contains', displayNameBySlug[slug]));
+            }
+
+            const querySnapshot = await getDocs(q);
+            const fetchedProducts: Product[] = querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    title: data.name,
+                    subtitle: data.description ? data.description.substring(0, 30) + '...' : 'Premium Footwear',
+                    price: `$${data.price}`,
+                    alt: data.name,
+                    src: data.imageUrl || 'https://placehold.co/400x500?text=No+Image',
+                    category: data.category,
+                    categories: data.categories || (data.category ? [data.category] : []),
+                    description: data.description,
+                    shippingInfo: data.shippingInfo,
+                    materialsCare: data.materialsCare,
+                    sizes: data.sizes || [],
+                    images: data.images || [],
+                    colors: data.colors || [],
+                    color: data.color,
+                    rating: data.rating,
+                    reviewCount: data.reviewCount
+                };
+            });
+            setProducts(fetchedProducts);
+        } catch (error) {
+            console.error("Error fetching products: ", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchProducts();
+  }, [slug]);
 
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark">
@@ -82,25 +99,37 @@ export default function Products() {
                 <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-gray-900 dark:text-white">{heading}</h1>
                 <p className="mt-4 max-w-2xl mx-auto text-base text-gray-500 dark:text-gray-400">Discover our curated collection of luxury footwear, crafted for the modern individual.</p>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 p-4">
-                {products.map((p, idx) => (
-                  <Link
-                    key={idx}
-                    to={`/product/${p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$|/g, '')}`}
-                    state={{ product: p }}
-                    className="flex flex-col gap-3 group"
-                  >
-                    <div className="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-xl overflow-hidden bg-gray-100 dark:bg-white/5">
-                      <img className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" alt={p.alt} src={p.src} />
-                    </div>
-                    <div>
-                      <p className="text-base font-medium text-gray-900 dark:text-white">{p.title}</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">{p.subtitle}</p>
-                      <p className="mt-1 text-sm font-semibold text-gray-700 dark:text-gray-300">{p.price}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+              
+              {loading ? (
+                <div className="flex justify-center items-center py-20">
+                    <p className="text-gray-500 dark:text-gray-400">Loading products...</p>
+                </div>
+              ) : products.length === 0 ? (
+                <div className="flex justify-center items-center py-20">
+                    <p className="text-gray-500 dark:text-gray-400">No products found in this category.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 p-4">
+                    {products.map((p) => (
+                    <Link
+                        key={p.id}
+                        to={`/product/${p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$|/g, '')}`}
+                        state={{ product: p }}
+                        className="flex flex-col gap-3 group"
+                    >
+                        <div className="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-xl overflow-hidden bg-gray-100 dark:bg-white/5">
+                        <img className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" alt={p.alt} src={p.src} />
+                        </div>
+                        <div>
+                        <p className="text-base font-medium text-gray-900 dark:text-white">{p.title}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{p.subtitle}</p>
+                        <p className="mt-1 text-sm font-semibold text-gray-700 dark:text-gray-300">{p.price}</p>
+                        </div>
+                    </Link>
+                    ))}
+                </div>
+              )}
+
               <div className="flex items-center justify-center py-10 md:py-16">
                 <a className="flex h-10 w-10 items-center justify-center text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white" href="#">
                   <span className="material-symbols-outlined text-2xl">chevron_left</span>

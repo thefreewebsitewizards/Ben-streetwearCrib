@@ -1,38 +1,177 @@
-import { useParams, useLocation } from 'react-router-dom'
-import { useState } from 'react'
-export default function ProductDetails() {
-  const mainImage = {
-    alt: 'Red and black Aura Stride sneaker viewed from the side.',
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBLmeWPP6so5jqW5RaCXrnXnBvyG4pWMjlnIY2P9RcS90uOuaM16xZiG0lZkNOL0-rwP8rn_0UJKx7C8HbqD259oRhguGXfoH6I2fL_19uBvXAEx9yJu1vWWvm0S9tTI5RgwvLeSwQD_49bePvW_NknexUS7YVhkPyfgHNNEgjS9e5ooMqvdm3KhgrfcNBMWBSY17ktrwFOfgxztXqit9CwAMa9jCA1_EQUslbbi5wKBmClVmx_I9T3zamn82S3vLtXZu2S8fZ0Zzc'
-  }
-  const thumbs = [
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuCW2leQAY9moXbBEckyx9_uonxtZyvJ8MZp_B3mRkf2bLcsbNflZt71BqtX-N181_wd1OizJN0FE5zTb_bVRSD8onVGF3COAEXON0IBfnCjUMbaDRfrRJDSgrHNCre6jisC7OuCD4qFoNV8HoF_FeIrx6NupWmijxnaEe_Ip4lJv-nQ_QSMzJ3yR9Qto3rtXZfzLNgZoqZbnSn9mXnbTKhxMsmzBo7veYjc2glsuMuCppqj3UwO7mhZAzNPapzHb84xC48PWRpGYKQ',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuCIlH4ASPhmlWxYV6PMxYFWRw3fuQI3QxfWK0DENnCNOdqyAMIZJpg5jtvF_HfGmTIUYpCPWqPlBUGbPARjUOUi3BCh8z_GdeF5I0rCeX3D5cmcA7k6ebu_9G_sjyYLZjvXTWH-3pcLoXotvkETF7G6xYU3bMIwvN3WgEWobUQXqL6t4xU7VA3oCTfe0h-OHUi_0ySJg2HJ2ZKSTB6or8XQnY5Gw5J50nphQ4SYXcMqZz3sI1r-95P4I2ipYPKHdx6lS0CWQY458fQ',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuBv6bJVsYXG81iW3DycDHGO4EjNQFZMRzn13DaeaBHpQluS0pCQ1LKc6WSbFJ9Iy3yVAC_KCahYpnJNLb3tRD9vljaZc8lsRfxKC0pK01RphZjUyxq8cMAFPMYcjepvQQXcm6Lk_GVYZcYdsP36mVh0k0og20_zLiu2o4DWNKIYrVSNQk31GzBiWpA1dpN7pYXiAuUtXKgZv66wmxJJOPdq-3-BZi720SsjO_Vm3dIFTwbFIoaGllAb0XtvWEvw127A5wx-nlF0ILI',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuBUP_oT8BJHCIfifKAJOA2rPa1LQQLCjJhv4Jbq1F-nd95Zyf8mFyFSem45L2MQ-6TZ6u2sbXnOQ1PjSHT-BqfXZqGVt78xXwHG1ndZPnhgFY8VY1wcWmLraVTE11OqrssBLjT2bYJuKBjiueDwxQ2c0zZVXoeiSSwNNLFYZF8bjetC6fY5MzGAblTR0AFOEnzhJ8r5JkPLT6ahRyNpXVLIGp6jVIe7re04H3ai0dcfENlrUeSKl7FtNqC8CYxsq7rkiB9CxDCwTUQ'
-  ]
-  const related = [
-    { title: 'Urban Voyager', price: '$199.00', alt: 'A pair of stylish white and blue sneakers.', bg: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAcuGUQrhZdcpP98clFOJqgb0zPyiPGlgH6ndy7d908ZHZnbZ0IH0ReJ9o_AFCX5vmta5lV8Ol7OtUc33NTWaf-aFyixTrONJo26DWFn0980fBJUEqKpPc4V-GXWBbZyRwkIhWJ9WSdQXP71TPh5M81JH7Nj2n7AQDWVVZoEUoCSjNulNS8srsXoFYrq_nnQ6Y9bK0xk8KtmHtYsv9EePGeRltZhpGT9cuZz0iYWIowgWjeAulMMr3ZfmUboHQQbYaVNPc7tITf71Y' },
-    { title: 'Metro Classic', price: '$219.00', alt: 'A minimalist black leather shoe.', bg: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAvrxm6ijkaN7jXvk4TdO7DUUVbhms5oKBuFDBKnI86F-YMFhqgbEKQ_W3PSU652tbE9HX564peHlbxMRLKhamhMX_SbzKWGwVt5msIQbAj45gCdt63J1wimN5s7FDKA4lPQD8RPMKRP9mDiK-4AyaqjsX3mQ3H098znE1Rt9PJcG3n0W02K7f-cHhIqLwiR1zvy4xQDgLY5DPfHkLCUgC9C2v11-S0t_Z-I0H2tJPLkeaxuunfWcxL1PlbRvhg3RqaVwn2Y-J5Qmo' },
-    { title: 'Apex High-Top', price: '$279.00', alt: 'A high-top sneaker in a tan color.', bg: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQr7hX0z9H_PwzE3eLWQNgH6s52vFVxg-VIta_KaNs1314ZSa9FVZ_ZrUAJbxFOOQYA-3F1G042bNBZqz11ctMABydcq1E5odxZbVJLrCZeGb302IDTxqqU1ElZD5S0tsaBTYrCzKsOHWUJX_848CZEadkcoIX3fvUhbDxbg3wd057b0O9nIJdgEBuGTx5W4cB81YrJfHWB91GRqxwULGnWo61Wdbmy-kaWBeOoAvdErDipZjnij-1Q_QhuobBkQIflMMuKQjVQNI' },
-    { title: 'Nimbus Cloud', price: '$189.00', alt: 'A sleek, all-white running shoe.', bg: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCuN4A-4e64_7j8PywuxM8Qi0kykzO9pOVTVEK8j-0NnIga5IjyuAY7tkrTv4j730MtWHa7elUxn620q47wgcbkSUWnSTzixiNxI7N0hPCNn50HvTTuSByw-Ud9cifgosjaeS9z18l9PX0sxGlGwq7Ilt7LrtOO-zy2CqS0fgSPFr3aP5BIUTf79oVMKyiv3bIBVzUOWGjN-G1QkMDW8zkSshi1RjaKl7FSHOyBUJ21C6_4gpKVGYMLU6wDUYOs5ZpEotjWKS_9yTA' }
-  ]
+import { useParams, useLocation, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { db } from '../firebase'
+import { collection, getDocs, query, limit, where } from 'firebase/firestore'
 
-  const { state } = useLocation() as { state?: { product?: { title?: string; price?: string; alt?: string; src?: string } } }
+interface Product {
+  id: string;
+  title: string;
+  subtitle: string;
+  price: string;
+  alt: string;
+  src: string;
+  category?: string;
+  description?: string;
+  shippingInfo?: string;
+  materialsCare?: string;
+  sizes?: string[];
+  images?: string[];
+  color?: string;
+  colors?: string[];
+  rating?: number;
+  reviewCount?: number;
+}
+
+export default function ProductDetails() {
+  const { state } = useLocation() as { state?: { product?: Product } }
   const { slug } = useParams()
+  
+  const [product, setProduct] = useState<Product | null>(state?.product || null)
+  const [loading, setLoading] = useState(!state?.product)
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
+  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [selectedColor, setSelectedColor] = useState<string | null>(null)
+  const [activeImage, setActiveImage] = useState<string>('')
+
   const fromSlug = slug ? slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : undefined
-  const productTitle = state?.product?.title || fromSlug || 'Aura Stride'
-  const price = state?.product?.price || '$249.00'
-  const dynamicMain = {
-    alt: state?.product?.alt || mainImage.alt,
-    src: state?.product?.src || mainImage.src,
-  }
+  const productTitle = product?.title || fromSlug || 'Product Details'
+  const price = product?.price || ''
+  
+  const safeColors = Array.isArray(product?.colors) ? product.colors : [];
+  const safeRating = typeof product?.rating === 'string' ? parseFloat(product.rating) : (product?.rating || 0);
+  const safeReviewCount = typeof product?.reviewCount === 'string' ? parseInt(product.reviewCount) : (product?.reviewCount || 0);
+  const safeSizes = Array.isArray(product?.sizes) ? product.sizes : [];
+
+  useEffect(() => {
+    if (product) {
+        setActiveImage(product.src || (product.images && product.images.length > 0 ? product.images[0] : 'https://placehold.co/600x600?text=No+Image'));
+        if (safeColors.length > 0) {
+            setSelectedColor(safeColors[0]);
+        } else if (product.color) {
+            setSelectedColor(product.color);
+        }
+    }
+  }, [product]);
+
+  // Fetch product if not in state (direct link access)
+  useEffect(() => {
+    if (state?.product) {
+        setProduct(state.product);
+        setLoading(false);
+        return;
+    }
+
+    const fetchProductBySlug = async () => {
+        if (!slug) return;
+        setLoading(true);
+        try {
+            // Since we don't have a slug field, we fetch all and match (fallback)
+            // Ideally, we should have a slug field in Firestore.
+            const querySnapshot = await getDocs(collection(db, 'products'));
+            const foundDoc = querySnapshot.docs.find(doc => {
+                const data = doc.data();
+                const generatedSlug = data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$|/g, '');
+                return generatedSlug === slug;
+            });
+
+            if (foundDoc) {
+                const data = foundDoc.data();
+                setProduct({
+                    id: foundDoc.id,
+                    title: data.name,
+                    subtitle: data.description ? data.description.substring(0, 30) + '...' : 'Premium Footwear',
+                    price: `$${data.price}`,
+                    alt: data.name,
+                    src: data.imageUrl || (data.images && data.images.length > 0 ? data.images[0] : 'https://placehold.co/600x600?text=No+Image'),
+                    category: data.category,
+                    description: data.description,
+                    shippingInfo: data.shippingInfo,
+                    materialsCare: data.materialsCare,
+                    sizes: data.sizes || [],
+                    images: data.images || [],
+                    colors: data.colors || [],
+                    rating: data.rating,
+                    reviewCount: data.reviewCount,
+                    color: data.color // Keep for backward compatibility or default
+                });
+            } else {
+                setProduct(null);
+            }
+        } catch (error) {
+            console.error("Error fetching product: ", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchProductBySlug();
+  }, [slug, state]);
+
+  // Fetch related products
+  useEffect(() => {
+    const fetchRelated = async () => {
+        try {
+            const productsRef = collection(db, 'products');
+            // Filter by "Best Selling" category as requested
+            const q = query(
+                productsRef, 
+                where('categories', 'array-contains', 'Best Selling'),
+                limit(10) 
+            );
+            const querySnapshot = await getDocs(q);
+            
+            const mapProduct = (doc: any) => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    title: data.name,
+                    subtitle: data.description ? data.description.substring(0, 30) + '...' : 'Premium Footwear',
+                    price: `$${data.price}`,
+                    alt: data.name,
+                    src: data.imageUrl || 'https://placehold.co/400x500?text=No+Image',
+                    category: data.category,
+                    description: data.description,
+                    shippingInfo: data.shippingInfo,
+                    materialsCare: data.materialsCare,
+                    sizes: data.sizes || [],
+                    images: data.images || [],
+                    colors: data.colors || [],
+                    color: data.color,
+                    rating: data.rating,
+                    reviewCount: data.reviewCount
+                };
+            };
+
+            let related = querySnapshot.docs
+                .map(mapProduct)
+                .filter(p => p.id !== product?.id);
+
+            // Fallback: If we don't have 4 Best Selling products (excluding current), fetch generic ones
+            if (related.length < 4) {
+                const q2 = query(productsRef, limit(10));
+                const snap2 = await getDocs(q2);
+                const generic = snap2.docs
+                    .map(mapProduct)
+                    .filter(p => p.id !== product?.id && !related.find(r => r.id === p.id));
+                
+                related = [...related, ...generic];
+            }
+
+            setRelatedProducts(related.slice(0, 4));
+        } catch (error) {
+            console.error("Error fetching related products: ", error);
+        }
+    };
+
+    fetchRelated();
+  }, [product?.id]);
+
   const [quantity, setQuantity] = useState(1)
   const handleAddToCart = () => {
     try {
       const raw = localStorage.getItem('cartItems')
       const items = raw ? JSON.parse(raw) : []
-      const toAdd = Array.from({ length: Math.max(1, quantity) }, () => ({ title: productTitle, price, src: dynamicMain.src }))
+      const toAdd = Array.from({ length: Math.max(1, quantity) }, () => ({ title: productTitle, price, src: activeImage }))
       const next = Array.isArray(items) ? items.concat(toAdd) : toAdd
       localStorage.setItem('cartItems', JSON.stringify(next))
     } catch {
@@ -42,17 +181,34 @@ export default function ProductDetails() {
     window.dispatchEvent(new Event('cartUpdated'))
   }
 
+  if (loading) {
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-background-light dark:bg-background-dark">
+            <p className="text-gray-500 dark:text-gray-400">Loading product details...</p>
+        </div>
+    );
+  }
+
+  if (!product) {
+      return (
+        <div className="flex flex-col justify-center items-center min-h-screen bg-background-light dark:bg-background-dark gap-4">
+            <p className="text-gray-500 dark:text-gray-400 text-xl">Product not found.</p>
+            <Link to="/products/all-sneakers" className="text-primary hover:underline">Browse all sneakers</Link>
+        </div>
+      );
+  }
+
   return (
-    <div className="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+    <div className="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden bg-background-light dark:bg-background-dark">
       <div className="layout-container flex h-full grow flex-col">
         <main className="flex-1">
           <section className="py-12 px-4 sm:px-6 lg:px-8">
             <div className="container mx-auto max-w-7xl">
               <div className="mb-8">
                 <div className="flex flex-wrap gap-2">
-                  <a className="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal" href="#">Home</a>
+                  <Link to="/" className="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">Home</Link>
                   <span className="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">/</span>
-                  <a className="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal" href="#">Shoes</a>
+                  <Link to="/products/all-sneakers" className="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">Shoes</Link>
                   <span className="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">/</span>
                   <span className="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal">{productTitle}</span>
                 </div>
@@ -60,51 +216,86 @@ export default function ProductDetails() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-16">
                 <div className="flex flex-col gap-4">
                   <div className="w-full aspect-square bg-white dark:bg-slate-800/50 rounded-xl shadow-sm overflow-hidden">
-                    <img alt={dynamicMain.alt} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" src={dynamicMain.src} />
+                    <img alt={product?.alt || productTitle} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" src={activeImage} />
                   </div>
-                  <div className="grid grid-cols-4 gap-4">
-                    {thumbs.map((src, i) => (
-                      <div key={i} className={i === 0 ? 'aspect-square bg-white dark:bg-slate-800/50 rounded-lg overflow-hidden border-2 border-primary cursor-pointer' : 'aspect-square bg-white dark:bg-slate-800/50 rounded-lg overflow-hidden opacity-70 hover:opacity-100 transition-opacity cursor-pointer'}>
-                        <img className="w-full h-full object-cover" alt="" src={src} />
-                      </div>
-                    ))}
-                  </div>
+                  {product?.images && product.images.length > 1 && (
+                    <div className="grid grid-cols-4 gap-4">
+                        {product.images.map((img, idx) => (
+                            <button 
+                                key={idx} 
+                                onClick={() => setActiveImage(img)}
+                                className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${activeImage === img ? 'border-primary ring-2 ring-primary/30' : 'border-transparent hover:border-slate-300 dark:hover:border-slate-600'}`}
+                            >
+                                <img src={img} alt={`Product view ${idx + 1}`} className="w-full h-full object-cover" />
+                            </button>
+                        ))}
+                    </div>
+                  )}
                 </div>
                 <div className="flex flex-col">
                   <div className="flex flex-wrap justify-between gap-3"><p className="text-[#111318] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">{productTitle}</p></div>
-                  <p className="text-slate-600 dark:text-slate-300 text-base font-normal leading-normal pb-3 pt-1">Elegant leather sneaker with a modern silhouette.</p>
+                  <p className="text-slate-600 dark:text-slate-300 text-base font-normal leading-normal pb-3 pt-1">{product.subtitle}</p>
                   <div className="flex items-center gap-2 my-2">
                     <div className="flex text-primary">
-                      <span className="material-symbols-outlined text-xl">star</span>
-                      <span className="material-symbols-outlined text-xl">star</span>
-                      <span className="material-symbols-outlined text-xl">star</span>
-                      <span className="material-symbols-outlined text-xl">star</span>
-                      <span className="material-symbols-outlined text-xl text-slate-300 dark:text-slate-600">star_half</span>
+                      {[1, 2, 3, 4, 5].map((star) => {
+                        const rating = safeRating;
+                        if (rating >= star) {
+                          return <span key={star} className="material-symbols-outlined text-xl">star</span>;
+                        } else if (rating >= star - 0.5) {
+                          return <span key={star} className="material-symbols-outlined text-xl">star_half</span>;
+                        } else {
+                          return <span key={star} className="material-symbols-outlined text-xl text-slate-300 dark:text-slate-600">star</span>;
+                        }
+                      })}
                     </div>
-                    <a className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary" href="#">4.8 stars | 32 Reviews</a>
+                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                        {safeRating ? `${safeRating} stars` : 'No ratings yet'} 
+                        {safeReviewCount ? ` (${safeReviewCount} reviews)` : ''}
+                    </span>
                   </div>
                   <h1 className="text-[#111318] dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] text-left pb-3 pt-5">{price}</h1>
                   <div className="mt-4">
-                    <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Color: <span className="font-normal">Crimson Black</span></h3>
+                    <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Color: <span className="font-normal">{selectedColor || product.color || 'Not specified'}</span></h3>
                     <div className="flex items-center gap-3">
-                      <button aria-label="Crimson Black" className="w-8 h-8 rounded-full bg-red-600 ring-2 ring-primary ring-offset-2 ring-offset-background-light dark:ring-offset-background-dark"></button>
-                      <button aria-label="Ocean Blue" className="w-8 h-8 rounded-full bg-blue-800 hover:ring-2 hover:ring-primary/50"></button>
-                      <button aria-label="Arctic White" className="w-8 h-8 rounded-full bg-slate-100 border border-slate-300 hover:ring-2 hover:ring-primary/50"></button>
-                      <button aria-label="Graphite Gray" className="w-8 h-8 rounded-full bg-slate-700 hover:ring-2 hover:ring-primary/50"></button>
+                        {safeColors.length > 0 ? (
+                            safeColors.map((c, idx) => (
+                                <div 
+                                    key={idx}
+                                    onClick={() => setSelectedColor(c)}
+                                    className={`w-8 h-8 rounded-full cursor-pointer ring-2 ring-offset-2 ring-offset-background-light dark:ring-offset-background-dark border border-slate-200 dark:border-slate-700 ${selectedColor === c ? 'ring-primary' : 'ring-transparent'}`}
+                                    style={{ backgroundColor: c.toLowerCase() }}
+                                    title={c}
+                                ></div>
+                            ))
+                        ) : product.color ? (
+                            <div 
+                                className="w-8 h-8 rounded-full ring-2 ring-primary ring-offset-2 ring-offset-background-light dark:ring-offset-background-dark border border-slate-200 dark:border-slate-700"
+                                style={{ backgroundColor: product.color.toLowerCase() }}
+                                title={product.color}
+                            ></div>
+                        ) : null}
                     </div>
                   </div>
                   <div className="mt-6">
-                    <div className="flex justify-between items-baseline">
-                      <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Select Size</h3>
-                      <a className="text-sm font-medium text-primary hover:underline" href="#">Size Guide</a>
-                    </div>
+                    <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Select Size</h3>
                     <div className="grid grid-cols-4 gap-2">
-                      <button className="p-3 border rounded-lg text-center text-sm font-medium border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary">7</button>
-                      <button className="p-3 border rounded-lg text-center text-sm font-medium border-primary dark:border-primary bg-primary/10 dark:bg-primary/20 text-primary dark:text-white">8</button>
-                      <button className="p-3 border rounded-lg text-center text-sm font-medium border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary">9</button>
-                      <button className="p-3 border rounded-lg text-center text-sm font-medium border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed">10</button>
-                      <button className="p-3 border rounded-lg text-center text-sm font-medium border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary">11</button>
-                      <button className="p-3 border rounded-lg text-center text-sm font-medium border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary">12</button>
+                      {safeSizes.length > 0 ? (
+                        safeSizes.map((size) => (
+                          <button 
+                            key={size}
+                            onClick={() => setSelectedSize(size)}
+                            className={`p-3 border rounded-lg text-center text-sm font-medium transition-colors ${
+                              selectedSize === size 
+                              ? 'border-primary dark:border-primary bg-primary/10 dark:bg-primary/20 text-primary dark:text-white' 
+                              : 'border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary text-slate-800 dark:text-slate-200'
+                            }`}
+                          >
+                            {size}
+                          </button>
+                        ))
+                      ) : (
+                        <p className="text-sm text-slate-500 col-span-4">No sizes available.</p>
+                      )}
                     </div>
                   </div>
                   <div className="mt-8 flex items-center gap-4">
@@ -119,15 +310,15 @@ export default function ProductDetails() {
                   <div className="mt-8 space-y-4">
                     <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
                       <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200">Product Description</h4>
-                      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">The Aura Stride redefines modern footwear with its sleek design and unparalleled comfort. Crafted from premium, ethically sourced leather, this sneaker is built to last while providing a lightweight feel for all-day wear. Perfect for both casual outings and sophisticated ensembles.</p>
+                      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{product.description || 'No description available.'}</p>
                     </div>
                     <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
                       <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200">Materials &amp; Care</h4>
-                      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Upper: 100% Full-Grain Leather. Sole: Natural Rubber. To clean, wipe gently with a damp cloth. Avoid prolonged exposure to direct sunlight.</p>
+                      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{product.materialsCare || 'No materials information available.'}</p>
                     </div>
                     <div>
                       <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200">Shipping &amp; Returns</h4>
-                      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Free standard shipping on all orders. Expedited shipping options available at checkout. We offer a 30-day return policy for unworn items.</p>
+                      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{product.shippingInfo || 'No shipping information available.'}</p>
                     </div>
                   </div>
                 </div>
@@ -139,13 +330,16 @@ export default function ProductDetails() {
               <h2 className="text-3xl font-bold text-center text-slate-800 dark:text-white mb-8">You Might Also Like</h2>
               <div className="flex overflow-x-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <div className="flex items-stretch p-4 gap-6">
-                  {related.map((r) => (
-                    <div key={r.title} className="flex flex-col gap-2 rounded-lg min-w-72">
-                      <div className="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-xl flex flex-col" data-alt={r.alt} style={{ backgroundImage: `url("${r.bg}")` }}></div>
+                  {relatedProducts.map((r) => (
+                    <Link to={`/product/${r.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$|/g, '')}`} state={{ product: r }} key={r.id} className="flex flex-col gap-2 rounded-lg min-w-72 group cursor-pointer">
+                      <div className="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-xl flex flex-col transition-transform duration-300 group-hover:scale-105" data-alt={r.alt} style={{ backgroundImage: `url("${r.src}")` }}></div>
                       <h3 className="font-semibold text-slate-800 dark:text-slate-200 mt-2">{r.title}</h3>
                       <p className="text-slate-500 dark:text-slate-400">{r.price}</p>
-                    </div>
+                    </Link>
                   ))}
+                  {relatedProducts.length === 0 && (
+                      <p className="text-gray-500">No related products found.</p>
+                  )}
                 </div>
               </div>
             </div>

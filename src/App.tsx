@@ -10,6 +10,7 @@ import Signin from './components/Signin'
 import Signup from './components/Signup'
 import AdminPage from './pages/AdminPage'
 import Cart from './pages/Cart'
+import Checkout from './pages/Checkout'
 
 function App() {
   const location = useLocation()
@@ -25,6 +26,7 @@ function App() {
         <Route path="/product/:slug" element={<ProductDetails />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
         <Route path="*" element={<Home />} />
       </Routes>
       {!isAdmin && modal === 'signin' && (

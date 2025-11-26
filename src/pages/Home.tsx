@@ -1,22 +1,106 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { db } from '../firebase'
+import { collection, getDocs, query, limit, orderBy, where } from 'firebase/firestore'
 
 export default function Home() {
+  const [carouselItems, setCarouselItems] = useState<any[]>([]);
+  const [bestSellingProducts, setBestSellingProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null)
   const directionRef = useRef(1)
   const posRef = useRef(0)
   const widthRef = useRef(0)
+
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Fetch Products for Carousel (using products collection instead of carouselItems)
+        const productsRef = collection(db, 'products');
+        // Fetch products specifically for the Home carousel category
+        const carouselQuery = query(productsRef, where('categories', 'array-contains', 'Home carousel'), limit(8)); 
+        const carouselSnapshot = await getDocs(carouselQuery);
+        const fetchedItems: any[] = carouselSnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            title: data.name,
+            subtitle: `$${data.price}`, // Show price as subtitle
+            imageUrl: data.imageUrl || (data.images && data.images[0]) || 'https://placehold.co/400x400?text=No+Image',
+            alt: data.name,
+            // Include full product data for the Link state
+            price: data.price, // Keep raw price if needed
+            category: data.category,
+            description: data.description,
+            shippingInfo: data.shippingInfo,
+            materialsCare: data.materialsCare,
+            sizes: data.sizes || [],
+            images: data.images || [],
+            colors: data.colors || [],
+            color: data.color,
+            rating: data.rating,
+            reviewCount: data.reviewCount,
+            src: data.imageUrl || (data.images && data.images[0]) // specific for product details compatibility if needed
+          };
+        });
+        setCarouselItems(fetchedItems);
+
+        // Fetch Best Selling Products
+        const q = query(productsRef, where('categories', 'array-contains', 'Best Selling'), limit(4));
+        const productSnapshot = await getDocs(q);
+        const fetchedProducts = productSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                title: data.name,
+                subtitle: data.description ? data.description.substring(0, 30) + '...' : 'Premium Footwear',
+                price: `$${data.price}`,
+                alt: data.name,
+                src: data.imageUrl || (data.images && data.images[0]) || 'https://placehold.co/400x500?text=No+Image',
+                category: data.category,
+                description: data.description,
+                shippingInfo: data.shippingInfo,
+                materialsCare: data.materialsCare,
+                sizes: data.sizes || [],
+                images: data.images || [],
+                colors: data.colors || [],
+                color: data.color,
+                rating: data.rating,
+                reviewCount: data.reviewCount
+            };
+        });
+        setBestSellingProducts(fetchedProducts);
+
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (loading || carouselItems.length === 0) return;
+
     const container = carouselRef.current
     if (!container) return
     const track = container.querySelector('.carousel-track') as HTMLElement | null
     if (!track) return
-    const originals = Array.from(track.children)
+
+    // Clean up any existing clones from previous renders
+    const existingClones = track.querySelectorAll('.clone');
+    existingClones.forEach(c => c.remove());
+
+    const originals = Array.from(track.children);
     originals.forEach(el => {
       const clone = el.cloneNode(true) as HTMLElement
+      clone.classList.add('clone');
       track.appendChild(clone)
     })
     widthRef.current = track.scrollWidth / 2
+    
     let frame = 0
     const step = () => {
       posRef.current += directionRef.current * 0.8
@@ -26,6 +110,7 @@ export default function Home() {
       track.style.willChange = 'transform'
       frame = requestAnimationFrame(step)
     }
+    
     let dragging = false
     let startX = 0
     let startPos = 0
@@ -71,6 +156,7 @@ export default function Home() {
       const delta = e.clientX - startX
       posRef.current = startPos - delta
     }
+    
     track.addEventListener('pointerdown', onDown, { passive: false })
     track.addEventListener('pointermove', onMove, { passive: false })
     track.addEventListener('pointerup', onUp)
@@ -82,7 +168,9 @@ export default function Home() {
     track.addEventListener('mousedown', onMouseDown)
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', onUp)
+    
     frame = requestAnimationFrame(step)
+    
     return () => {
       cancelAnimationFrame(frame)
       track.removeEventListener('pointerdown', onDown)
@@ -96,119 +184,47 @@ export default function Home() {
       track.removeEventListener('mousedown', onMouseDown)
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onUp)
+      
+      const clones = track.querySelectorAll('.clone');
+      clones.forEach(c => c.remove());
     }
-  }, [])
+  }, [loading, carouselItems])
+
   return (
     <main className="flex flex-col">
       <section className="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
-        <div ref={carouselRef} className="relative overflow-hidden touch-pan-x cursor-grab active:cursor-grabbing select-none">
-          <div className="flex items-stretch p-2 gap-6 carousel-track touch-pan-x cursor-grab active:cursor-grabbing select-none">
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
-              <div
-                className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col"
-                data-alt="A stylish white sneaker with blue accents on a minimalist background"
-                style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDObCgFQMPVhg53clAD8zGAQX_ZRnfVykOpof_pHW0oDAC1T3awIBS40Z8BowjoHcBgnLt_dAFJiefVFieamxxleTq-NYtyem8iyd5KlZoCs6psBKwt2XGxrp2gHMfHQFV9pJfD-FpwfOdumALrDKENFfkTC26gPCxglGj8n6jdGJ68MxX6-IL1TvHwbaXRYtmzyhO2LiRESMcrwebdHAwf6-CzJXoEsmRAmbwwCyWkN8nOKV1um_KHutznOzhnhGH36Vt811GArtw")' }}
-              ></div>
-              <div className="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
-                <div>
-                  <p className="text-base font-semibold">The Vertex Collection</p>
-                  <p className="text-sm text-text-muted-light dark:text-text-muted-dark">Discover the Pinnacle of Modern Design</p>
+        {loading ? (
+             <div className="flex justify-center items-center h-64">
+                <p className="text-gray-500 dark:text-gray-400">Loading carousel items...</p>
+             </div>
+        ) : (
+            <div ref={carouselRef} className="relative overflow-hidden touch-pan-x cursor-grab active:cursor-grabbing select-none">
+            <div className="flex items-stretch p-2 gap-6 carousel-track touch-pan-x cursor-grab active:cursor-grabbing select-none">
+                {carouselItems.map((item) => (
+                <div key={item.id} className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
+                    <div
+                    className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col"
+                    data-alt={item.alt}
+                    style={{ backgroundImage: `url("${item.imageUrl}")` }}
+                    ></div>
+                    <div className="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+                    <div>
+                        <p className="text-base font-semibold">{item.title}</p>
+                        <p className="text-sm text-text-muted-light dark:text-text-muted-dark">{item.subtitle}</p>
+                    </div>
+                    <Link 
+                        to={`/product/${item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$|/g, '')}`}
+                        state={{ product: item }}
+                        className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    >
+                        <span className="truncate">Shop Now</span>
+                    </Link>
+                    </div>
                 </div>
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                  <span className="truncate">Shop Now</span>
-                </button>
-              </div>
+                ))}
             </div>
-
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
-              <div
-                className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col"
-                data-alt="A pair of sleek black running shoes with white soles"
-                style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAIDofSqXo7iwTcus55-Adhszsv9wo6f2fk4RgEwX--tR6IMIHLu97yxadDGq7MowNktm23hdcyBBrhp1meZ5gfdt9-zWB2CL1EKUsXZJ6f7O12HaDc6y4M1U9fauNLRjRTZLdOLzJBREr2gmrdbSOHArc3SQ0rk8vpLNx8Eqt8X945euKbGglAPOVGKKv9M6XJeNljG19xOzThpNq0sPN5Ug7ecAZsBLTDe8Cztf3_syY39qTowwVzGZT5HRLcIo7RIUsRX6vLTJY")' }}
-              ></div>
-              <div className="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
-                <div>
-                  <p className="text-base font-semibold">Nova Runner Series</p>
-                  <p className="text-sm text-text-muted-light dark:text-text-muted-dark">Engineered for the Urban Explorer</p>
-                </div>
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                  <span className="truncate">Shop Now</span>
-                </button>
-              </div>
             </div>
-
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
-              <div
-                className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col"
-                data-alt="A limited edition high-top sneaker with unique color patterns"
-                style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAU0CY6NjT4fCFKWDyXVQ8Plf_5uoETXHv7nFimmlWMmotfYJQriQN2CBmoHF7tmJ0PmAf3HmV9RH0vIrx4kYXkJuDDqpa9YSmLDo6xkP7wikgSgq4k2OBtG_e6NvzxapCqyTPrGzAI2EQTXZsgxWA_6g_tj0uldfV6aLUhfHnwqdZSi81QWrapFUMrI4RKkN1J-g9DGJG6dWap4Wr39yVNPj0fKTqD5DbUcnXQA3VJNT9N2xMxqOJrk7PB8hjyC_hlpIE184tsVPU")' }}
-              ></div>
-              <div className="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
-                <div>
-                  <p className="text-base font-semibold">Ascend Limited Edition</p>
-                  <p className="text-sm text-text-muted-light dark:text-text-muted-dark">Exclusivity Redefined in Every Step</p>
-                </div>
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                  <span className="truncate">Shop Now</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
-              <div
-                className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col"
-                data-alt="Classic brown leather shoe"
-                style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDxxDaYnp4Av3awuwCjeN0tqQ0Rg6mAifF8NSjF5KV8_pGAcCko2IlRCzQn_vPT8AsnD6x5ZbxImvo7ljAQUMNFSjJNq7QMdlIZFuuH4b2QY-UFjXTs3uaAEsEOYtAQVJFkNLMv6y8mFP1Nje2PU97-SEYPhGBPBD1Pi5Kwh8suovqmdKEZdbo-AZG2cey7dDz-5cmxX37lNHlAHCpqOdMT5rkCx6tZW6ygbMfc8O3OtNZrU9GnTU_c07fnuF2qeUAzNcfITz2XcgM")' }}
-              ></div>
-              <div className="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
-                <div>
-                  <p className="text-base font-semibold">Heritage Craft</p>
-                  <p className="text-sm text-text-muted-light dark:text-text-muted-dark">Timeless Style, Unmatched Quality</p>
-                </div>
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                  <span className="truncate">Shop Now</span>
-                </button>
-              </div>
-            </div>
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
-              <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col" data-alt="Premium tan and white sneaker" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAj8QBvbI2UJI2AkLf16lfSG28h0YhFc3chlGML2oqEwzHXwBFypmj2LsMthfUH5YbRdEVgopK5_FytsQSDVuhzOA8PaaE5paggEdA8bofyVKjh9gmEp2OBScwZ4LizkLJ_MZ3XFa23kJzyMr-PZ-FjAtA7_6Py1YindWNB9g4MbLq20Y4-0pk9WSrlbLvn3QpyWE-UUqoLrv3m9P2yCHbsp3K5eM3VCflS30a7CABZSm6EC7NDrhyYedAHJrh-DCny2ahjQvsB-UY")' }}></div>
-              <div className="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
-                <div>
-                  <p className="text-base font-semibold">Monarch Elite</p>
-                  <p className="text-sm text-text-muted-light dark:text-text-muted-dark">Crafted for Daily Comfort</p>
-                </div>
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                  <span className="truncate">Shop Now</span>
-                </button>
-              </div>
-            </div>
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
-              <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col" data-alt="Sleek all-black sneaker" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAw6IJaYk3imu8UBN9fjqCpCf1Yo0a3ALuMFrfB886UmHit4rdYsbvYucypxRuIPKYPSA1XXkKNiD74snGBKoYcboEGQq1ftQHvcSkii3bIIOpBwl8d44Rf2xWavd-GLOkmDnhTcqkg8CoMDMmgP7CaXQLhGk5k1KKSv4KXyjfxUKiLH6lJhKQrxFnUtOYy5P-tdc0TcwFZTF1xZzErO_ONJtdsWMpAAzC0VQZ3EKhWoVveUDKPTruGjzjdOkpVFGM9daX3ovyVs64")' }}></div>
-              <div className="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
-                <div>
-                  <p className="text-base font-semibold">Eclipse Runner Pro</p>
-                  <p className="text-sm text-text-muted-light dark:text-text-muted-dark">Performance Meets Style</p>
-                </div>
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                  <span className="truncate">Shop Now</span>
-                </button>
-              </div>
-            </div>
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
-              <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col" data-alt="Colorful athletic sneaker" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC4b7jrPtANBt4N1poSHsG_fF0tEGqY9SpaAoRWcuta7Uvc9a40OaWs78-2LT-B22F_p2QLSgfsNpYMDzuYz_juDjDbbmu_wjBRYgPobM2rOoXP42guBLghWfZs71OwXN-wVIKxVHiHBnsjn9rKoHhwY7wDhbvo6y0HF-SyWd351Qn8poq4AG08dS9TXlGVuoG5-YNDn6kt9YSTSp_HIkj-hc4ntiffKm9EWb1y667irdXyn2GWpnTaVEvd2sCdX8fVBX0fdWaLf_A")' }}></div>
-              <div className="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
-                <div>
-                  <p className="text-base font-semibold">Aether High</p>
-                  <p className="text-sm text-text-muted-light dark:text-text-muted-dark">Elevate Your Stride</p>
-                </div>
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                  <span className="truncate">Shop Now</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-        </div>
+        )}
       </section>
 
       <section className="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
@@ -261,61 +277,30 @@ export default function Home() {
       <section className="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
         <h2 className="text-2xl sm:text-3xl font-bold tracking-tight px-4 pb-6">Best Selling</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          <Link
-            to="/product/aura-classic-low"
-            state={{ product: { title: 'Aura Classic Low', price: '$180.00', alt: 'A pair of stylish tan and white sneakers', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAj8QBvbI2UJI2AkLf16lfSG28h0YhFc3chlGML2oqEwzHXwBFypmj2LsMthfUH5YbRdEVgopK5_FytsQSDVuhzOA8PaaE5paggEdA8bofyVKjh9gmEp2OBScwZ4LizkLJ_MZ3XFa23kJzyMr-PZ-FjAtA7_6Py1YindWNB9g4MbLq20Y4-0pk9WSrlbLvn3QpyWE-UUqoLrv3m9P2yCHbsp3K5eM3VCflS30a7CABZSm6EC7NDrhyYedAHJrh-DCny2ahjQvsB-UY' } }}
-            className="group"
-          >
-            <div className="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800/50 aspect-square">
-              <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A pair of stylish tan and white sneakers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAj8QBvbI2UJI2AkLf16lfSG28h0YhFc3chlGML2oqEwzHXwBFypmj2LsMthfUH5YbRdEVgopK5_FytsQSDVuhzOA8PaaE5paggEdA8bofyVKjh9gmEp2OBScwZ4LizkLJ_MZ3XFa23kJzyMr-PZ-FjAtA7_6Py1YindWNB9g4MbLq20Y4-0pk9WSrlbLvn3QpyWE-UUqoLrv3m9P2yCHbsp3K5eM3VCflS30a7CABZSm6EC7NDrhyYedAHJrh-DCny2ahjQvsB-UY" />
-            </div>
-            <div className="pt-4">
-              <h4 className="font-semibold">Aura Classic Low</h4>
-              <p className="text-text-muted-light dark:text-text-muted-dark">$180.00</p>
-            </div>
-          </Link>
-
-          <Link
-            to="/product/velocity-runner"
-            state={{ product: { title: 'Velocity Runner', price: '$220.00', alt: 'A colorful athletic sneaker with red, white, and blue tones', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC4b7jrPtANBt4N1poSHsG_fF0tEGqY9SpaAoRWcuta7Uvc9a40OaWs78-2LT-B22F_p2QLSgfsNpYMDzuYz_juDjDbbmu_wjBRYgPobM2rOoXP42guBLghWfZs71OwXN-wVIKxVHiHBnsjn9rKoHhwY7wDhbvo6y0HF-SyWd351Qn8poq4AG08dS9TXlGVuoG5-YNDn6kt9YSTSp_HIkj-hc4ntiffKm9EWb1y667irdXyn2GWpnTaVEvd2sCdX8fVBX0fdWaLf_A' } }}
-            className="group"
-          >
-            <div className="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800/50 aspect-square">
-              <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A colorful athletic sneaker with red, white, and blue tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4b7jrPtANBt4N1poSHsG_fF0tEGqY9SpaAoRWcuta7Uvc9a40OaWs78-2LT-B22F_p2QLSgfsNpYMDzuYz_juDjDbbmu_wjBRYgPobM2rOoXP42guBLghWfZs71OwXN-wVIKxVHiHBnsjn9rKoHhwY7wDhbvo6y0HF-SyWd351Qn8poq4AG08dS9TXlGVuoG5-YNDn6kt9YSTSp_HIkj-hc4ntiffKm9EWb1y667irdXyn2GWpnTaVEvd2sCdX8fVBX0fdWaLf_A" />
-            </div>
-            <div className="pt-4">
-              <h4 className="font-semibold">Velocity Runner</h4>
-              <p className="text-text-muted-light dark:text-text-muted-dark">$220.00</p>
-            </div>
-          </Link>
-
-          <Link
-            to="/product/stratus-high-top"
-            state={{ product: { title: 'Stratus High-Top', price: '$250.00', alt: 'A white high-top sneaker with a clean design', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBaB_2s9MYZxAjJKlvExn7j77UY6bUQJW5LaGhYKRZ7UnfcYdpL81TLyKRUpB_JgDFe35sjTPCN9Vv5FQ6l05MQq1uVIk2QXxeai9PSFuqWcRMOqIX3mBrv5jsVMRW3LJk3MA-Pz_Tug1JbT2qyIOWwwFLpGvwdfpP2hjt17QwWbYlO84GQdUefmmMXboBq7HhPzH8288rVSONgepxZUbIeSEmSrpwNc_RP8rTT8iBug1ZJMb5ZiwvADKf8s0pbtRCn1eesxE_BoSU' } }}
-            className="group"
-          >
-            <div className="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800/50 aspect-square">
-              <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A white high-top sneaker with a clean design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaB_2s9MYZxAjJKlvExn7j77UY6bUQJW5LaGhYKRZ7UnfcYdpL81TLyKRUpB_JgDFe35sjTPCN9Vv5FQ6l05MQq1uVIk2QXxeai9PSFuqWcRMOqIX3mBrv5jsVMRW3LJk3MA-Pz_Tug1JbT2qyIOWwwFLpGvwdfpP2hjt17QwWbYlO84GQdUefmmMXboBq7HhPzH8288rVSONgepxZUbIeSEmSrpwNc_RP8rTT8iBug1ZJMb5ZiwvADKf8s0pbtRCn1eesxE_BoSU" />
-            </div>
-            <div className="pt-4">
-              <h4 className="font-semibold">Stratus High-Top</h4>
-              <p className="text-text-muted-light dark:text-text-muted-dark">$250.00</p>
-            </div>
-          </Link>
-
-          <Link
-            to="/product/eclipse-midnight"
-            state={{ product: { title: 'Eclipse Midnight', price: '$195.00', alt: 'A sleek all-black sneaker on a dark background', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAw6IJaYk3imu8UBN9fjqCpCf1Yo0a3ALuMFrfB886UmHit4rdYsbvYucypxRuIPKYPSA1XXkKNiD74snGBKoYcboEGQq1ftQHvcSkii3bIIOpBwl8d44Rf2xWavd-GLOkmDnhTcqkg8CoMDMmgP7CaXQLhGk5k1KKSv4KXyjfxUKiLH6lJhKQrxFnUtOYy5P-tdc0TcwFZTF1xZzErO_ONJtdsWMpAAzC0VQZ3EKhWoVveUDKPTruGjzjdOkpVFGM9daX3ovyVs64' } }}
-            className="group"
-          >
-            <div className="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800/50 aspect-square">
-              <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A sleek all-black sneaker on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAw6IJaYk3imu8UBN9fjqCpCf1Yo0a3ALuMFrfB886UmHit4rdYsbvYucypxRuIPKYPSA1XXkKNiD74snGBKoYcboEGQq1ftQHvcSkii3bIIOpBwl8d44Rf2xWavd-GLOkmDnhTcqkg8CoMDMmgP7CaXQLhGk5k1KKSv4KXyjfxUKiLH6lJhKQrxFnUtOYy5P-tdc0TcwFZTF1xZzErO_ONJtdsWMpAAzC0VQZ3EKhWoVveUDKPTruGjzjdOkpVFGM9daX3ovyVs64" />
-            </div>
-            <div className="pt-4">
-              <h4 className="font-semibold">Eclipse Midnight</h4>
-              <p className="text-text-muted-light dark:text-text-muted-dark">$195.00</p>
-            </div>
-          </Link>
+          {bestSellingProducts.length > 0 ? (
+            bestSellingProducts.map((product) => (
+              <Link
+                key={product.id}
+                to={`/product/${product.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$|/g, '')}`}
+                state={{ product: product }}
+                className="group"
+              >
+                <div className="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800/50 aspect-square">
+                  <img
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    alt={product.alt}
+                    src={product.src}
+                  />
+                </div>
+                <div className="pt-4">
+                  <h4 className="font-semibold text-[#111318] dark:text-white">{product.title}</h4>
+                  <p className="text-text-muted-light dark:text-text-muted-dark">{product.price}</p>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div className="col-span-full text-center text-gray-500">No products found.</div>
+          )}
         </div>
       </section>
 
