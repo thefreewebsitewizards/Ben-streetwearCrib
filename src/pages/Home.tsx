@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { db } from '../firebase'
 import { collection, getDocs, query, limit, where } from 'firebase/firestore'
 
@@ -11,6 +11,7 @@ export default function Home() {
   const directionRef = useRef(1)
   const posRef = useRef(0)
   const widthRef = useRef(0)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +31,7 @@ export default function Home() {
             imageUrl: data.imageUrl || (data.images && data.images[0]) || 'https://placehold.co/400x400?text=No+Image',
             alt: data.name,
             // Include full product data for the Link state
-            price: data.price, // Keep raw price if needed
+            price: `$${data.price}`,
             category: data.category,
             description: data.description,
             shippingInfo: data.shippingInfo,
@@ -114,17 +115,20 @@ export default function Home() {
     let dragging = false
     let startX = 0
     let startPos = 0
+    let isClick = true
+    
     const onDown = (e: PointerEvent) => {
       dragging = true
+      isClick = true
       startX = e.clientX
       startPos = posRef.current
       directionRef.current = 0
       container.setPointerCapture?.(e.pointerId)
-      e.preventDefault()
     }
     const onMove = (e: PointerEvent) => {
       if (!dragging) return
       const delta = e.clientX - startX
+      if (Math.abs(delta) > 5) isClick = false
       posRef.current = startPos - delta
     }
     const onUp = () => {
@@ -133,28 +137,59 @@ export default function Home() {
     }
     const onTouchStart = (e: TouchEvent) => {
       dragging = true
+      isClick = true
       startX = e.touches[0].clientX
       startPos = posRef.current
       directionRef.current = 0
-      e.preventDefault()
     }
     const onTouchMove = (e: TouchEvent) => {
       if (!dragging) return
       const delta = e.touches[0].clientX - startX
+      if (Math.abs(delta) > 5) {
+        isClick = false
+        // Only prevent default if scrolling horizontally
+        if (e.cancelable) e.preventDefault() 
+      }
       posRef.current = startPos - delta
-      e.preventDefault()
     }
     const onMouseDown = (e: MouseEvent) => {
       dragging = true
+      isClick = true
       startX = e.clientX
       startPos = posRef.current
       directionRef.current = 0
-      e.preventDefault()
     }
     const onMouseMove = (e: MouseEvent) => {
       if (!dragging) return
       const delta = e.clientX - startX
+      if (Math.abs(delta) > 5) isClick = false
       posRef.current = startPos - delta
+    }
+
+    const handleClick = (e: Event) => {
+        if (!isClick) {
+            e.preventDefault()
+            e.stopPropagation()
+            return
+        }
+
+        // Find the closest element with data-product attribute
+        const target = e.target as HTMLElement
+        const productEl = target.closest('[data-product]') as HTMLElement
+        
+        if (productEl) {
+            e.preventDefault()
+            e.stopPropagation()
+            try {
+                const product = JSON.parse(productEl.dataset.product || '{}')
+                if (product.title) {
+                    const slug = product.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$|/g, '')
+                    navigate(`/product/${slug}`, { state: { product } })
+                }
+            } catch (err) {
+                console.error('Error parsing product data', err)
+            }
+        }
     }
     
     track.addEventListener('pointerdown', onDown, { passive: false })
@@ -166,6 +201,7 @@ export default function Home() {
     track.addEventListener('touchmove', onTouchMove, { passive: false })
     track.addEventListener('touchend', onUp)
     track.addEventListener('mousedown', onMouseDown)
+    track.addEventListener('click', handleClick, { capture: true }) // Capture to handle before internal links
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', onUp)
     
@@ -182,6 +218,7 @@ export default function Home() {
       track.removeEventListener('touchmove', onTouchMove)
       track.removeEventListener('touchend', onUp)
       track.removeEventListener('mousedown', onMouseDown)
+      track.removeEventListener('click', handleClick, { capture: true })
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onUp)
       
@@ -195,27 +232,37 @@ export default function Home() {
       <section className="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
         {loading ? (
              <div className="flex justify-center items-center h-64">
-                <p className="text-gray-500 dark:text-gray-400">Loading carousel items...</p>
+                <p className="text-gray-500">Loading carousel items...</p>
              </div>
         ) : (
             <div ref={carouselRef} className="relative overflow-hidden touch-pan-x cursor-grab active:cursor-grabbing select-none">
             <div className="flex items-stretch p-2 gap-6 carousel-track touch-pan-x cursor-grab active:cursor-grabbing select-none">
                 {carouselItems.map((item) => (
-                <div key={item.id} className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light dark:bg-foreground-dark border border-gray-200 dark:border-gray-800 min-w-[280px] sm:min-w-[320px] snap-center">
-                    <div
-                    className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col"
-                    data-alt={item.alt}
-                    style={{ backgroundImage: `url("${item.imageUrl}")` }}
-                    ></div>
+                <div 
+                    key={item.id} 
+                    className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-foreground-light border border-gray-200 min-w-[280px] sm:min-w-[320px] snap-center"
+                    data-product={JSON.stringify(item)}
+                >
+                    <Link 
+                        to={`/product/${item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$|/g, '')}`}
+                        state={{ product: item }}
+                        className="block w-full"
+                    >
+                        <div
+                        className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl flex flex-col cursor-pointer transition-opacity hover:opacity-90"
+                        data-alt={item.alt}
+                        style={{ backgroundImage: `url("${item.imageUrl}")` }}
+                        ></div>
+                    </Link>
                     <div className="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
                     <div>
                         <p className="text-base font-semibold">{item.title}</p>
-                        <p className="text-sm text-text-muted-light dark:text-text-muted-dark">{item.subtitle}</p>
+                        <p className="text-sm font-bold text-primary">{item.subtitle}</p>
                     </div>
                     <Link 
                         to={`/product/${item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$|/g, '')}`}
                         state={{ product: item }}
-                        className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                        className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors"
                     >
                         <span className="truncate">Shop Now</span>
                     </Link>
@@ -262,10 +309,10 @@ export default function Home() {
             style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 35%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuADtpo7l4d56IBJbGfFQjXJvKu4_nnJ1bC9ei8HWy5W5Hn6xiIM4V8DGMoS-hlSPbVJrNibuPheFt7LFPUutn8EwM0txUMcYw2c1cDQpL_K5a2R7EYyjDCU2vJLFvlsr8x_BZiM-l7INqbsrGMxcKjioFUfftHuajie_AqAPxP_D4BeEXvUu0kdsxevdihZzNKmn8N5scwLYlWB4qjvSXL5k3QnVs9Zir_-AIYATV8JHwNLtrOnNGl6vXFbBsldH2LB4h16yw90p5Y")' }}
           >
             <div className="flex flex-col p-6 sm:p-10 gap-4">
-              <h3 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight max-w-xl">New Collection Arriving This Fall</h3>
-              <p className="text-gray-200 text-base sm:text-lg max-w-lg">Experience the next wave of design innovation. Timeless aesthetics meet cutting-edge comfort.</p>
+              <h3 className="text-primary text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight max-w-xl">New Collection Arriving This Fall</h3>
+              <p className="text-text-light text-base sm:text-lg max-w-lg">Experience the next wave of design innovation. Timeless aesthetics meet cutting-edge comfort.</p>
               <div className="pt-2">
-                <button className="flex min-w-[84px] max-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-white text-text-light text-base font-bold leading-normal tracking-[0.015em] hover:bg-gray-200 transition-colors">
+                <button className="flex min-w-[84px] max-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-red-400 transition-colors">
                   <span className="truncate">Explore Now</span>
                 </button>
               </div>
@@ -285,7 +332,7 @@ export default function Home() {
                 state={{ product: product }}
                 className="group"
               >
-                <div className="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800/50 aspect-square">
+                <div className="overflow-hidden rounded-xl bg-gray-100 aspect-square">
                   <img
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     alt={product.alt}
@@ -293,8 +340,8 @@ export default function Home() {
                   />
                 </div>
                 <div className="pt-4">
-                  <h4 className="font-semibold text-[#111318] dark:text-white">{product.title}</h4>
-                  <p className="text-text-muted-light dark:text-text-muted-dark">{product.price}</p>
+                  <h4 className="font-semibold text-[#111318]">{product.title}</h4>
+                  <p className="text-primary font-bold">{product.price}</p>
                 </div>
               </Link>
             ))
@@ -311,28 +358,28 @@ export default function Home() {
               <span className="material-symbols-outlined">inventory_2</span>
             </div>
             <h4 className="font-bold text-lg">Huge Product Range</h4>
-            <p className="text-text-muted-light dark:text-text-muted-dark mt-1 text-sm">Explore hundreds of styles from exclusive collections to timeless classics.</p>
+            <p className="text-text-muted-light mt-1 text-sm">Explore hundreds of styles from exclusive collections to timeless classics.</p>
           </div>
           <div className="flex flex-col items-center p-4">
             <div className="flex items-center justify-center size-12 mb-4 rounded-full bg-primary/10 text-primary">
               <span className="material-symbols-outlined">sell</span>
             </div>
             <h4 className="font-bold text-lg">Best Price</h4>
-            <p className="text-text-muted-light dark:text-text-muted-dark mt-1 text-sm">We guarantee premium quality footwear at competitive prices.</p>
+            <p className="text-text-muted-light mt-1 text-sm">We guarantee premium quality footwear at competitive prices.</p>
           </div>
           <div className="flex flex-col items-center p-4">
             <div className="flex items-center justify-center size-12 mb-4 rounded-full bg-primary/10 text-primary">
               <span className="material-symbols-outlined">local_shipping</span>
             </div>
             <h4 className="font-bold text-lg">Quick Shipping</h4>
-            <p className="text-text-muted-light dark:text-text-muted-dark mt-1 text-sm">Fast, reliable, and free shipping on all orders over $150.</p>
+            <p className="text-text-muted-light mt-1 text-sm">Fast, reliable, and free shipping on all orders over $150.</p>
           </div>
           <div className="flex flex-col items-center p-4">
             <div className="flex items-center justify-center size-12 mb-4 rounded-full bg-primary/10 text-primary">
               <span className="material-symbols-outlined">support_agent</span>
             </div>
             <h4 className="font-bold text-lg">Dedicated Support</h4>
-            <p className="text-text-muted-light dark:text-text-muted-dark mt-1 text-sm">Our team is here to help you with any questions, 24/7.</p>
+            <p className="text-text-muted-light mt-1 text-sm">Our team is here to help you with any questions, 24/7.</p>
           </div>
         </div>
       </section>

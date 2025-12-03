@@ -1,10 +1,77 @@
 const {onCall, HttpsError} = require("firebase-functions/v2/https");
 const {setGlobalOptions} = require("firebase-functions/v2");
 const admin = require("firebase-admin");
+const Stripe = require("stripe");
+require('dotenv').config();
+
+// Initialize Stripe with your secret key
+// Using environment variables (loaded from .env file)
+const stripeSecret = process.env.STRIPE_SECRET_KEY;
+const stripe = new Stripe(stripeSecret, {
+    apiVersion: '2023-10-16',
+});
+
+// The connected account ID of the client
+const stripeConnectedId = process.env.STRIPE_CONNECTED_ACCOUNT_ID;
+const CONNECTED_ACCOUNT_ID = stripeConnectedId;
 
 admin.initializeApp();
 
 setGlobalOptions({ region: 'europe-west1', maxInstances: 10 });
+
+exports.createStripeCheckoutSession = onCall({ cors: true }, async (request) => {
+    const { items, returnUrl } = request.data;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+        throw new HttpsError('invalid-argument', 'Items array is required and cannot be empty.');
+    }
+
+    try {
+        // Calculate total amount to verify and for application fee
+        // Note: In a real app, fetch prices from DB to prevent client-side manipulation
+        let totalAmount = 0;
+        const lineItems = items.map(item => {
+            const priceVal = parseFloat(item.price.replace(/[^0-9.]/g, '')) || 0;
+            const quantity = item.quantity || 1;
+            const amountInCents = Math.round(priceVal * 100);
+            totalAmount += amountInCents * quantity;
+
+            return {
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: item.title,
+                        images: item.src ? [item.src] : [],
+                    },
+                    unit_amount: amountInCents,
+                },
+                quantity: quantity,
+            };
+        });
+
+        // Calculate 10% application fee
+        const applicationFeeAmount = Math.round(totalAmount * 0.10);
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: lineItems,
+            mode: 'payment',
+            success_url: `${returnUrl}?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${returnUrl}?canceled=true`,
+            payment_intent_data: {
+                application_fee_amount: applicationFeeAmount,
+                transfer_data: {
+                    destination: CONNECTED_ACCOUNT_ID,
+                },
+            },
+        });
+
+        return { sessionId: session.id, url: session.url };
+    } catch (error) {
+        console.error("Error creating Stripe session: ", error);
+        throw new HttpsError('internal', 'Unable to create Stripe session: ' + error.message);
+    }
+});
 
 exports.addProduct = onCall({ cors: true }, async (request) => {
     // Authentication check removed for testing purposes as requested

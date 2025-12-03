@@ -8,7 +8,7 @@ export default function CategoryTicker() {
     '100% Satisfaction Guarantee',
   ]
   return (
-    <div className="w-full overflow-hidden text-blue-600 border-b border-gray-200 dark:border-gray-800 bg-background-light dark:bg-background-dark">
+    <div className="hidden md:block w-full overflow-hidden text-primary border-b border-gray-200 bg-background-light">
       <div className="flex gap-8 whitespace-nowrap animate-[marquee-reverse_20s_linear_infinite] px-4 sm:px-10 lg:px-20 py-3">
         {messages.concat(messages).map((text, idx) => (
           <span key={idx} className="text-sm font-medium">

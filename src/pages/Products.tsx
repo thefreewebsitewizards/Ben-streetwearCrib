@@ -90,23 +90,23 @@ export default function Products() {
   }, [slug]);
 
   return (
-    <div className="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark">
+    <div className="relative flex h-auto min-h-screen w-full flex-col bg-background-light">
       <div className="layout-container flex h-full grow flex-col">
         <div className="flex flex-1 justify-center py-5">
           <div className="layout-content-container flex flex-col w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <main className="flex-1">
               <div className="px-4 py-12 md:py-20 text-center">
-                <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-gray-900 dark:text-white">{heading}</h1>
-                <p className="mt-4 max-w-2xl mx-auto text-base text-gray-500 dark:text-gray-400">Discover our curated collection of luxury footwear, crafted for the modern individual.</p>
+                <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-gray-900">{heading}</h1>
+                <p className="mt-4 max-w-2xl mx-auto text-base text-primary">Discover our curated collection of luxury footwear, crafted for the modern individual.</p>
               </div>
               
               {loading ? (
                 <div className="flex justify-center items-center py-20">
-                    <p className="text-gray-500 dark:text-gray-400">Loading products...</p>
+                    <p className="text-gray-500">Loading products...</p>
                 </div>
               ) : products.length === 0 ? (
                 <div className="flex justify-center items-center py-20">
-                    <p className="text-gray-500 dark:text-gray-400">No products found in this category.</p>
+                    <p className="text-gray-500">No products found in this category.</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 p-4">
@@ -117,13 +117,13 @@ export default function Products() {
                         state={{ product: p }}
                         className="flex flex-col gap-3 group"
                     >
-                        <div className="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-xl overflow-hidden bg-gray-100 dark:bg-white/5">
+                        <div className="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-xl overflow-hidden bg-gray-100">
                         <img className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" alt={p.alt} src={p.src} />
                         </div>
                         <div>
-                        <p className="text-base font-medium text-gray-900 dark:text-white">{p.title}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">{p.subtitle}</p>
-                        <p className="mt-1 text-sm font-semibold text-gray-700 dark:text-gray-300">{p.price}</p>
+                        <p className="text-base font-medium text-gray-900">{p.title}</p>
+                        <p className="text-sm text-gray-500">{p.subtitle}</p>
+                        <p className="mt-1 text-sm font-bold text-primary">{p.price}</p>
                         </div>
                     </Link>
                     ))}
@@ -131,16 +131,16 @@ export default function Products() {
               )}
 
               <div className="flex items-center justify-center py-10 md:py-16">
-                <a className="flex h-10 w-10 items-center justify-center text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white" href="#">
+                <a className="flex h-10 w-10 items-center justify-center text-gray-500 hover:text-gray-900" href="#">
                   <span className="material-symbols-outlined text-2xl">chevron_left</span>
                 </a>
                 <a className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold bg-primary text-white" href="#">1</a>
-                <a className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10" href="#">2</a>
-                <a className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10" href="#">3</a>
-                <span className="flex h-10 w-10 items-center justify-center text-sm text-gray-600 dark:text-gray-300">...</span>
-                <a className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10" href="#">9</a>
-                <a className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10" href="#">10</a>
-                <a className="flex h-10 w-10 items-center justify-center text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white" href="#">
+                <a className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100" href="#">2</a>
+                <a className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100" href="#">3</a>
+                <span className="flex h-10 w-10 items-center justify-center text-sm text-gray-600">...</span>
+                <a className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100" href="#">9</a>
+                <a className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100" href="#">10</a>
+                <a className="flex h-10 w-10 items-center justify-center text-gray-500 hover:text-gray-900" href="#">
                   <span className="material-symbols-outlined text-2xl">chevron_right</span>
                 </a>
               </div>

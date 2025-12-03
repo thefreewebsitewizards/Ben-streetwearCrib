@@ -99,45 +99,45 @@ export default function Cart() {
 
   if (cartItems.length === 0) {
       return (
-        <div className="flex flex-col justify-center items-center min-h-screen bg-background-light dark:bg-background-dark gap-4">
+        <div className="flex flex-col justify-center items-center min-h-screen bg-background-light gap-4">
             <span className="material-symbols-outlined text-6xl text-gray-300">shopping_bag</span>
-            <p className="text-gray-500 dark:text-gray-400 text-xl">Your cart is empty.</p>
+            <p className="text-gray-500 text-xl">Your cart is empty.</p>
             <Link to="/products/all-sneakers" className="text-primary hover:underline font-medium">Start Shopping</Link>
         </div>
       );
   }
 
   return (
-    <div className="bg-background-light dark:bg-background-dark font-display text-[#111318] dark:text-gray-200 relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+    <div className="bg-background-light font-display text-[#111318] relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
       <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
           <div className="w-full lg:w-2/3">
-            <div className="flex flex-wrap justify-between gap-4 pb-6 border-b border-gray-200 dark:border-gray-800">
-              <h1 className="text-[#111318] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Shopping Bag</h1>
-              <Link to="/products/all-sneakers" className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary self-end">Continue Shopping</Link>
+            <div className="flex flex-wrap justify-between gap-4 pb-6 border-b border-gray-200">
+              <h1 className="text-[#111318] text-4xl font-black leading-tight tracking-[-0.033em]">Shopping Bag</h1>
+              <Link to="/products/all-sneakers" className="text-sm font-medium text-gray-600 hover:text-primary self-end">Continue Shopping</Link>
             </div>
             <div className="mt-8 space-y-6">
               {cartItems.map((item, index) => (
-                  <div key={`${item.title}-${index}`} className="flex gap-4 md:gap-6 bg-transparent justify-between items-center border-b border-gray-200 dark:border-gray-800 pb-6 last:border-0">
+                  <div key={`${item.title}-${index}`} className="flex gap-4 md:gap-6 bg-transparent justify-between items-center border-b border-gray-200 pb-6 last:border-0">
                     <div className="flex items-center gap-4 md:gap-6 flex-grow">
                       <div
                         className="bg-center bg-no-repeat aspect-square bg-cover rounded-lg w-24 h-24 sm:w-28 sm:h-28"
                         style={{ backgroundImage: `url("${item.src}")` }}
                       />
                       <div className="flex flex-1 flex-col justify-center">
-                        <p className="text-[#111318] dark:text-white text-base font-semibold leading-normal">{item.title}</p>
+                        <p className="text-[#111318] text-base font-semibold leading-normal">{item.title}</p>
                         {/* Note: Size and Color are not yet captured in ProductDetails, so omitting for now or using defaults */}
-                        <p className="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">Standard Size</p>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal mt-2 md:hidden">{item.price}</p>
+                        <p className="text-gray-600 text-sm font-normal leading-normal">Standard Size</p>
+                        <p className="text-primary text-sm font-bold leading-normal mt-2 md:hidden">{item.price}</p>
                       </div>
                     </div>
                     <div className="flex flex-col md:flex-row items-end md:items-center gap-4 md:gap-8">
-                      <div className="flex items-center gap-2 text-[#111318] dark:text-white">
+                      <div className="flex items-center gap-2 text-[#111318]">
                         <button 
                             type="button" 
                             onClick={() => handleQuantityChange(item, -1)}
                             disabled={item.quantity <= 1}
-                            className="text-base font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200/60 dark:bg-gray-800/60 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+                            className="text-base font-medium flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white cursor-pointer hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >-</button>
                         <input 
                             className="text-base font-medium w-6 p-0 text-center bg-transparent focus:outline-0 focus:ring-0 focus:border-none border-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" 
@@ -148,13 +148,13 @@ export default function Cart() {
                         <button 
                             type="button" 
                             onClick={() => handleQuantityChange(item, 1)}
-                            className="text-base font-medium flex h-8 w-8 items-center justify-center rounded-full bg-gray-200/60 dark:bg-gray-800/60 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
+                            className="text-base font-medium flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white cursor-pointer hover:bg-primary/90 transition-colors"
                         >+</button>
                       </div>
-                      <p className="text-[#111318] dark:text-white text-base font-medium leading-normal hidden md:block w-20 text-right">{item.price}</p>
+                      <p className="text-primary text-base font-bold leading-normal hidden md:block w-20 text-right">{item.price}</p>
                       <button 
                         onClick={() => handleRemoveItem(item)}
-                        className="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400" 
+                        className="text-gray-500 hover:text-red-500" 
                         type="button" 
                         aria-label="Remove item"
                       >
@@ -166,35 +166,35 @@ export default function Cart() {
             </div>
           </div>
           <div className="w-full lg:w-1/3">
-            <div className="sticky top-28 bg-white dark:bg-gray-900/50 p-6 lg:p-8 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
-              <h2 className="text-[#111318] dark:text-white text-xl font-bold leading-tight tracking-[-0.015em] pb-4 border-b border-gray-200 dark:border-gray-800">Order Summary</h2>
+            <div className="sticky top-28 bg-white p-6 lg:p-8 rounded-xl shadow-sm border border-gray-200">
+              <h2 className="text-[#111318] text-xl font-bold leading-tight tracking-[-0.015em] pb-4 border-b border-gray-200">Order Summary</h2>
               <div className="mt-6 space-y-4 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
-                  <span className="font-medium text-[#111318] dark:text-white">${subtotal.toFixed(2)}</span>
+                  <span className="text-gray-600">Subtotal</span>
+                  <span className="font-bold text-primary">${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Shipping</span>
-                  <span className="font-medium text-gray-600 dark:text-gray-400">Calculated at next step</span>
+                  <span className="text-gray-600">Shipping</span>
+                  <span className="font-medium text-gray-600">Calculated at next step</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Taxes</span>
-                  <span className="font-medium text-gray-600 dark:text-gray-400">Calculated at next step</span>
+                  <span className="text-gray-600">Taxes</span>
+                  <span className="font-medium text-gray-600">Calculated at next step</span>
                 </div>
               </div>
-              <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800">
+              <div className="mt-6 pt-4 border-t border-gray-200">
                 <div className="flex justify-between items-baseline">
-                  <span className="text-base font-bold text-[#111318] dark:text-white">Estimated Total</span>
-                  <span className="text-xl font-bold text-[#111318] dark:text-white">${estimatedTotal.toFixed(2)}</span>
+                  <span className="text-base font-bold text-[#111318]">Estimated Total</span>
+                  <span className="text-xl font-bold text-primary">${estimatedTotal.toFixed(2)}</span>
                 </div>
               </div>
               <div className="mt-8">
                 <Link to="/checkout" className="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold hover:bg-primary/90 transition-colors">Proceed to Checkout</Link>
               </div>
               <div className="mt-4">
-                <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-800/50">
+                <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-gray-100">
                   <input className="flex-grow bg-transparent text-sm p-2 border-0 focus:ring-0" placeholder="Enter promo code" type="text" />
-                  <button className="px-4 py-1.5 rounded-md bg-gray-200 dark:bg-gray-700 text-sm font-semibold text-[#111318] dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Apply</button>
+                  <button className="px-4 py-1.5 rounded-md bg-gray-200 text-sm font-semibold text-[#111318] hover:bg-gray-300 transition-colors">Apply</button>
                 </div>
               </div>
             </div>

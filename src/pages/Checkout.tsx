@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { db, auth } from '../firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
+import { functions } from '../firebase';
+import { httpsCallable } from 'firebase/functions';
 
 interface CartItem {
   title: string;
@@ -9,8 +9,12 @@ interface CartItem {
   src: string;
 }
 
+interface GroupedCartItem extends CartItem {
+  quantity: number;
+}
+
 export default function Checkout() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<GroupedCartItem[]>([]);
   const [subtotal, setSubtotal] = useState(0);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -18,22 +22,30 @@ export default function Checkout() {
     email: '',
     address: '',
     city: '',
-    zip: '',
-    cardName: '',
-    cardNumber: '',
-    expDate: '',
-    cvv: ''
+    zip: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   useEffect(() => {
     const raw = localStorage.getItem('cartItems');
     if (raw) {
       try {
         const items: CartItem[] = JSON.parse(raw);
-        setCartItems(items);
+        
+        // Group items for display and Stripe
+        const grouped: { [key: string]: GroupedCartItem } = {};
+        items.forEach(item => {
+          const key = `${item.title}-${item.price}`;
+          if (grouped[key]) {
+            grouped[key].quantity += 1;
+          } else {
+            grouped[key] = { ...item, quantity: 1 };
+          }
+        });
+        
+        setCartItems(Object.values(grouped));
+        
         const total = items.reduce((sum, item) => {
           const priceVal = parseFloat(item.price.replace(/[^0-9.]/g, '')) || 0;
           return sum + priceVal;
@@ -56,51 +68,46 @@ export default function Checkout() {
     setError('');
 
     try {
-      const orderData = {
-        customer: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          address: formData.address,
-          city: formData.city,
-          zip: formData.zip
-        },
-        items: cartItems,
-        total: subtotal,
-        status: 'Processing',
-        createdAt: serverTimestamp(),
-        userId: auth.currentUser ? auth.currentUser.uid : 'guest'
-      };
+                const createStripeCheckoutSession = httpsCallable(functions, 'createStripeCheckoutSession');
+      
+      // Prepare items for the backend
+      const itemsForStripe = cartItems.map(item => ({
+        title: item.title,
+        price: item.price,
+        src: item.src,
+        quantity: item.quantity
+      }));
 
-      await addDoc(collection(db, 'orders'), orderData);
+      const response = await createStripeCheckoutSession({
+        items: itemsForStripe,
+        returnUrl: window.location.origin, // Redirect back to home (which will handle success/cancel query params)
+      });
 
-      // Clear cart
-      localStorage.removeItem('cartItems');
-      localStorage.removeItem('cartCount');
-      window.dispatchEvent(new Event('cartUpdated'));
+      const { url } = response.data as { url: string };
+      
+      // Redirect to Stripe
+      window.location.href = url;
 
-      navigate('/?orderSuccess=true');
     } catch (err: any) {
-      console.error("Error placing order: ", err);
-      setError('Failed to place order. Please try again.');
-    } finally {
+      console.error("Error initiating checkout: ", err);
+      setError('Failed to initiate checkout. Please try again. ' + (err.message || ''));
       setLoading(false);
     }
   };
 
   if (cartItems.length === 0) {
     return (
-        <div className="flex flex-col justify-center items-center min-h-screen bg-background-light dark:bg-background-dark gap-4">
-            <p className="text-gray-500 dark:text-gray-400 text-xl">Your cart is empty.</p>
+        <div className="flex flex-col justify-center items-center min-h-screen bg-background-light gap-4">
+            <p className="text-gray-500 text-xl">Your cart is empty.</p>
             <Link to="/" className="text-primary hover:underline font-medium">Return Home</Link>
         </div>
     );
   }
 
   return (
-    <div className="bg-background-light dark:bg-background-dark font-display text-[#111318] dark:text-gray-200 min-h-screen w-full py-10 px-4 md:px-8">
+    <div className="bg-background-light font-display text-[#111318] min-h-screen w-full py-10 px-4 md:px-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-[#111318] dark:text-white">Checkout</h1>
+        <h1 className="text-3xl font-bold mb-8 text-[#111318]">Checkout</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Form Section */}
@@ -109,25 +116,20 @@ export default function Checkout() {
               <div className="flex flex-col gap-4">
                 <h2 className="text-xl font-semibold">Shipping Information</h2>
                 <div className="grid grid-cols-2 gap-4">
-                  <input id="firstName" placeholder="First Name" required className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700" value={formData.firstName} onChange={handleInputChange} />
-                  <input id="lastName" placeholder="Last Name" required className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700" value={formData.lastName} onChange={handleInputChange} />
+                  <input id="firstName" placeholder="First Name" required className="p-3 rounded-lg bg-gray-100 border border-gray-300" value={formData.firstName} onChange={handleInputChange} />
+                  <input id="lastName" placeholder="Last Name" required className="p-3 rounded-lg bg-gray-100 border border-gray-300" value={formData.lastName} onChange={handleInputChange} />
                 </div>
-                <input id="email" type="email" placeholder="Email" required className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700" value={formData.email} onChange={handleInputChange} />
-                <input id="address" placeholder="Address" required className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700" value={formData.address} onChange={handleInputChange} />
+                <input id="email" type="email" placeholder="Email" required className="p-3 rounded-lg bg-gray-100 border border-gray-300" value={formData.email} onChange={handleInputChange} />
+                <input id="address" placeholder="Address" required className="p-3 rounded-lg bg-gray-100 border border-gray-300" value={formData.address} onChange={handleInputChange} />
                 <div className="grid grid-cols-2 gap-4">
-                  <input id="city" placeholder="City" required className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700" value={formData.city} onChange={handleInputChange} />
-                  <input id="zip" placeholder="ZIP Code" required className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700" value={formData.zip} onChange={handleInputChange} />
+                  <input id="city" placeholder="City" required className="p-3 rounded-lg bg-gray-100 border border-gray-300" value={formData.city} onChange={handleInputChange} />
+                  <input id="zip" placeholder="ZIP Code" required className="p-3 rounded-lg bg-gray-100 border border-gray-300" value={formData.zip} onChange={handleInputChange} />
                 </div>
               </div>
 
               <div className="flex flex-col gap-4">
                 <h2 className="text-xl font-semibold">Payment Details</h2>
-                <input id="cardName" placeholder="Name on Card" required className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700" value={formData.cardName} onChange={handleInputChange} />
-                <input id="cardNumber" placeholder="Card Number" required className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700" value={formData.cardNumber} onChange={handleInputChange} />
-                <div className="grid grid-cols-2 gap-4">
-                  <input id="expDate" placeholder="MM/YY" required className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700" value={formData.expDate} onChange={handleInputChange} />
-                  <input id="cvv" placeholder="CVV" required className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700" value={formData.cvv} onChange={handleInputChange} />
-                </div>
+                <p className="text-gray-600 text-sm">You will be redirected to Stripe to complete your secure payment.</p>
               </div>
 
               {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -137,13 +139,13 @@ export default function Checkout() {
                 disabled={loading}
                 className="w-full py-4 bg-primary text-white font-bold rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
               >
-                {loading ? 'Processing...' : `Pay $${subtotal.toFixed(2)}`}
+                {loading ? 'Redirecting to Payment...' : `Proceed to Payment ($${subtotal.toFixed(2)})`}
               </button>
             </form>
           </div>
 
           {/* Order Summary */}
-          <div className="bg-gray-50 dark:bg-gray-900/50 p-6 rounded-xl h-fit">
+          <div className="bg-gray-50 p-6 rounded-xl h-fit">
             <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
             <div className="flex flex-col gap-4 mb-6 max-h-96 overflow-y-auto">
               {cartItems.map((item, i) => (
@@ -151,14 +153,14 @@ export default function Checkout() {
                   <div className="w-16 h-16 bg-cover bg-center rounded-md" style={{ backgroundImage: `url('${item.src}')` }}></div>
                   <div className="flex-1">
                     <p className="font-medium text-sm">{item.title}</p>
-                    <p className="text-gray-500 text-sm">{item.price}</p>
+                    <p className="text-primary font-bold text-sm">{item.price}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="border-t border-gray-200 dark:border-gray-800 pt-4 flex justify-between font-bold text-lg">
+            <div className="border-t border-gray-200 pt-4 flex justify-between font-bold text-lg">
               <span>Total</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span className="text-primary">${subtotal.toFixed(2)}</span>
             </div>
           </div>
         </div>

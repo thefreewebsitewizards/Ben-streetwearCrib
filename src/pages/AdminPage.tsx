@@ -39,11 +39,11 @@ function ProductsSection({ onEdit, onDelete }: { onEdit: (product: any) => void,
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-white text-2xl font-bold leading-tight tracking-tight">Products</h2>
-      <div className="rounded-xl border border-gray-800/60 bg-foreground-dark overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+      <h2 className="text-gray-900 text-2xl font-bold leading-tight tracking-tight">Products</h2>
+      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-gray-400">
-            <thead className="border-b border-gray-800/60 text-xs uppercase text-gray-500">
+          <table className="w-full text-left text-sm text-gray-600">
+            <thead className="border-b border-gray-200 text-xs uppercase text-gray-500">
               <tr>
                 <th className="px-6 py-3" scope="col">Product</th>
                 <th className="px-6 py-3" scope="col">Category</th>
@@ -55,14 +55,14 @@ function ProductsSection({ onEdit, onDelete }: { onEdit: (product: any) => void,
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} className="px-6 py-4 text-center text-white">Loading products...</td></tr>
+                <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-600">Loading products...</td></tr>
               ) : products.length === 0 ? (
-                <tr><td colSpan={6} className="px-6 py-4 text-center text-white">No products found.</td></tr>
+                <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-600">No products found.</td></tr>
               ) : (
                 products.map((product) => (
-                  <tr key={product.id} className="border-b border-gray-800/60 hover:bg-background-dark/50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-white flex items-center gap-3">
-                        <div className="w-10 h-10 rounded bg-gray-700 overflow-hidden flex-shrink-0">
+                  <tr key={product.id} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-gray-900 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded bg-gray-200 overflow-hidden flex-shrink-0">
                             <img 
                                 src={product.imageUrl || (product.images && product.images[0]) || 'https://placehold.co/100x100?text=No+Img'} 
                                 alt={product.name} 
@@ -72,7 +72,7 @@ function ProductsSection({ onEdit, onDelete }: { onEdit: (product: any) => void,
                         <span className="truncate max-w-[150px]">{product.name}</span>
                     </td>
                     <td className="px-6 py-4">{product.category}</td>
-                    <td className="px-6 py-4 font-medium text-white">${product.price}</td>
+                    <td className="px-6 py-4 font-medium text-gray-900">${product.price}</td>
                     <td className="px-6 py-4">{product.stock}</td>
                     <td className="px-6 py-4 flex items-center gap-1">
                         <span className="material-symbols-outlined text-yellow-500 text-sm">star</span>
@@ -80,10 +80,10 @@ function ProductsSection({ onEdit, onDelete }: { onEdit: (product: any) => void,
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
-                          <button onClick={() => onEdit(product)} className="text-blue-400 hover:text-blue-300 p-1 rounded hover:bg-blue-900/20 transition-colors" title="Edit">
+                          <button onClick={() => onEdit(product)} className="text-blue-600 hover:text-blue-500 p-1 rounded hover:bg-blue-50 transition-colors" title="Edit">
                               <span className="material-symbols-outlined text-lg">edit</span>
                           </button>
-                          <button onClick={() => onDelete(product)} className="text-red-400 hover:text-red-300 p-1 rounded hover:bg-red-900/20 transition-colors" title="Delete">
+                          <button onClick={() => onDelete(product)} className="text-red-600 hover:text-red-500 p-1 rounded hover:bg-red-50 transition-colors" title="Delete">
                               <span className="material-symbols-outlined text-lg">delete</span>
                           </button>
                       </div>
@@ -360,15 +360,15 @@ function AddProductSection() {
   };
 
   return (
-    <main className="flex-1 p-8 overflow-y-auto">
+    <main className="flex-1 p-8 overflow-y-auto bg-gray-50">
       <div className="flex flex-col gap-12 max-w-7xl mx-auto">
         <div className="flex flex-col gap-6">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <p className="text-white text-3xl font-bold leading-tight tracking-tight">{editingId ? 'Edit Product' : 'Add New Product'}</p>
+            <p className="text-gray-900 text-3xl font-bold leading-tight tracking-tight">{editingId ? 'Edit Product' : 'Add New Product'}</p>
             <div className="flex gap-3">
                 {editingId && (
-                    <button onClick={resetForm} className="px-4 py-2 rounded-lg bg-gray-700 text-white font-medium hover:bg-gray-600 transition-colors">
+                    <button onClick={resetForm} className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors">
                         Cancel Edit
                     </button>
                 )}
@@ -381,20 +381,20 @@ function AddProductSection() {
 
           {/* Messages */}
           {message.text && (
-            <div className={`p-4 rounded-lg ${message.type === 'success' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}`}>
+            <div className={`p-4 rounded-lg ${message.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
               {message.text}
             </div>
           )}
 
           {/* Form */}
-          <div className="rounded-xl p-6 lg:p-8 border border-gray-800/60 bg-foreground-dark shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+          <div className="rounded-xl p-6 lg:p-8 border border-gray-200 bg-white shadow-sm">
             <form className="grid grid-cols-1 lg:grid-cols-3 gap-6" onSubmit={handleSubmit}>
               <div className="lg:col-span-2 flex flex-col gap-6">
                 {/* Product Name */}
                 <div>
-                  <label className="text-sm font-medium text-gray-300 mb-2 block" htmlFor="product-name">Product Name</label>
+                  <label className="text-sm font-medium text-gray-700 mb-2 block" htmlFor="product-name">Product Name</label>
                   <input 
-                    className="h-12 w-full px-3 bg-background-dark border border-gray-800/60 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary focus:bg-background-dark autofill:bg-background-dark autofill:text-white" 
+                    className="h-12 w-full px-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-primary focus:border-primary focus:bg-white autofill:bg-white autofill:text-gray-900" 
                     id="product-name" 
                     placeholder="e.g. Air Jordan 1 Retro High" 
                     type="text" 
@@ -405,9 +405,9 @@ function AddProductSection() {
                 </div>
                 {/* Description */}
                 <div>
-                  <label className="text-sm font-medium text-gray-300 mb-2 block" htmlFor="product-description">Description</label>
+                  <label className="text-sm font-medium text-gray-700 mb-2 block" htmlFor="product-description">Description</label>
                   <textarea 
-                    className="w-full min-h-40 p-3 bg-background-dark border border-gray-800/60 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary focus:bg-background-dark autofill:bg-background-dark autofill:text-white scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-background-dark" 
+                    className="w-full min-h-40 p-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-primary focus:border-primary focus:bg-white autofill:bg-white autofill:text-gray-900 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100" 
                     id="product-description" 
                     placeholder="Enter a detailed description..." 
                     rows={6}
@@ -419,18 +419,18 @@ function AddProductSection() {
                 {/* Materials & Shipping */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="text-sm font-medium text-gray-300 mb-2 block" htmlFor="materials-care">Materials & Care</label>
+                      <label className="text-sm font-medium text-gray-700 mb-2 block" htmlFor="materials-care">Materials & Care</label>
                       <textarea 
-                        className="w-full min-h-24 p-3 bg-background-dark border border-gray-800/60 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary focus:bg-background-dark autofill:bg-background-dark autofill:text-white scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-background-dark" 
+                        className="w-full min-h-24 p-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-primary focus:border-primary focus:bg-white autofill:bg-white autofill:text-gray-900 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100" 
                         id="materials-care" 
                         value={formData.materialsCare}
                         onChange={handleInputChange}
                       ></textarea>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-300 mb-2 block" htmlFor="shipping-info">Shipping & Returns</label>
+                      <label className="text-sm font-medium text-gray-700 mb-2 block" htmlFor="shipping-info">Shipping & Returns</label>
                       <textarea 
-                        className="w-full min-h-24 p-3 bg-background-dark border border-gray-800/60 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary focus:bg-background-dark autofill:bg-background-dark autofill:text-white scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-background-dark" 
+                        className="w-full min-h-24 p-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-primary focus:border-primary focus:bg-white autofill:bg-white autofill:text-gray-900 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100" 
                         id="shipping-info" 
                         value={formData.shippingInfo}
                         onChange={handleInputChange}
@@ -441,11 +441,11 @@ function AddProductSection() {
                 {/* Price, Stock, Category */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                   <div>
-                    <label className="text-sm font-medium text-gray-300 mb-2 block" htmlFor="product-price">Price</label>
+                    <label className="text-sm font-medium text-gray-700 mb-2 block" htmlFor="product-price">Price</label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
                       <input 
-                        className="h-12 w-full pl-7 bg-background-dark border border-gray-800/60 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary focus:bg-background-dark autofill:bg-background-dark autofill:text-white" 
+                        className="h-12 w-full pl-7 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-primary focus:border-primary focus:bg-white autofill:bg-white autofill:text-gray-900" 
                         id="product-price" 
                         type="text" 
                         value={formData.price}
@@ -455,9 +455,9 @@ function AddProductSection() {
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-300 mb-2 block" htmlFor="stock-quantity">Stock Quantity</label>
+                    <label className="text-sm font-medium text-gray-700 mb-2 block" htmlFor="stock-quantity">Stock Quantity</label>
                     <input 
-                      className="h-12 w-full px-3 bg-background-dark border border-gray-800/60 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary focus:bg-background-dark autofill:bg-background-dark autofill:text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                      className="h-12 w-full px-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-primary focus:border-primary focus:bg-white autofill:bg-white autofill:text-gray-900 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
                       id="stock-quantity" 
                       type="number" 
                       value={formData.stock}
@@ -466,12 +466,12 @@ function AddProductSection() {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-300 mb-2 block" htmlFor="product-category">Category</label>
+                    <label className="text-sm font-medium text-gray-700 mb-2 block" htmlFor="product-category">Category</label>
                     <div className="relative" ref={categoryDropdownRef}>
                       <button
                         type="button"
                         onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-                        className="h-12 w-full px-3 bg-background-dark border border-gray-800/60 rounded-lg text-white focus:ring-primary focus:border-primary text-left flex items-center justify-between"
+                        className="h-12 w-full px-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:ring-primary focus:border-primary text-left flex items-center justify-between"
                       >
                         <span className="truncate">
                           {formData.categories && formData.categories.length > 0 
@@ -482,20 +482,20 @@ function AddProductSection() {
                       </button>
                       
                       {showCategoryDropdown && (
-                        <div className="absolute z-10 w-full mt-1 bg-foreground-dark border border-gray-800/60 rounded-lg shadow-lg max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-background-dark">
+                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                           {AVAILABLE_CATEGORIES.map((category) => (
                             <div 
                               key={category} 
-                              className="flex items-center px-4 py-2 hover:bg-background-dark cursor-pointer"
+                              className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer"
                               onClick={() => handleCategoryChange(category)}
                             >
                               <input
                                 type="checkbox"
                                 checked={formData.categories?.includes(category) || false}
                                 onChange={() => {}} // Handled by div click
-                                className="mr-3 h-4 w-4 rounded border-gray-600 bg-gray-700 text-primary focus:ring-primary"
+                                className="mr-3 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                               />
-                              <span className="text-white text-sm">{category}</span>
+                              <span className="text-gray-900 text-sm">{category}</span>
                             </div>
                           ))}
                         </div>
@@ -507,9 +507,9 @@ function AddProductSection() {
                 {/* Color & Rating */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                        <label className="text-sm font-medium text-gray-300 mb-2 block" htmlFor="product-color">Color</label>
+                        <label className="text-sm font-medium text-gray-700 mb-2 block" htmlFor="product-color">Color</label>
                         <input 
-                            className="h-12 w-full px-3 bg-background-dark border border-gray-800/60 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary focus:bg-background-dark autofill:bg-background-dark autofill:text-white" 
+                            className="h-12 w-full px-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-primary focus:border-primary focus:bg-white autofill:bg-white autofill:text-gray-900" 
                             id="product-color" 
                             placeholder="e.g. Red, Blue, Black" 
                             type="text" 
@@ -518,10 +518,10 @@ function AddProductSection() {
                         />
                     </div>
                     <div>
-                        <label className="text-sm font-medium text-gray-300 mb-2 block" htmlFor="product-rating">Rating (0-5)</label>
+                        <label className="text-sm font-medium text-gray-700 mb-2 block" htmlFor="product-rating">Rating (0-5)</label>
                         <div className="grid grid-cols-2 gap-3">
                             <input 
-                                className="h-12 w-full px-3 bg-background-dark border border-gray-800/60 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary focus:bg-background-dark autofill:bg-background-dark autofill:text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                                className="h-12 w-full px-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-primary focus:border-primary focus:bg-white autofill:bg-white autofill:text-gray-900 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
                                 id="product-rating" 
                                 placeholder="Rate 0-5" 
                                 type="number" 
@@ -532,7 +532,7 @@ function AddProductSection() {
                                 onChange={handleInputChange}
                             />
                             <input 
-                                className="h-12 w-full px-3 bg-background-dark border border-gray-800/60 rounded-lg text-white placeholder-gray-500 focus:ring-primary focus:border-primary focus:bg-background-dark autofill:bg-background-dark autofill:text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                                className="h-12 w-full px-3 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-primary focus:border-primary focus:bg-white autofill:bg-white autofill:text-gray-900 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
                                 id="review-count" 
                                 placeholder="Reviews" 
                                 type="number" 
@@ -546,7 +546,7 @@ function AddProductSection() {
 
                 {/* Sizes */}
                 <div>
-                    <label className="text-sm font-medium text-gray-300 mb-2 block">Available Sizes</label>
+                    <label className="text-sm font-medium text-gray-700 mb-2 block">Available Sizes</label>
                     <div className="flex flex-wrap gap-2">
                         {AVAILABLE_SIZES.map(size => (
                             <button
@@ -556,7 +556,7 @@ function AddProductSection() {
                                 className={`px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
                                     selectedSizes.includes(size)
                                         ? 'bg-primary border-primary text-white'
-                                        : 'bg-background-dark border-gray-800/60 text-gray-400 hover:border-gray-600'
+                                        : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
                                 }`}
                             >
                                 {size}
@@ -569,16 +569,16 @@ function AddProductSection() {
               {/* Image Upload Section - Vertical Layout Improved */}
               <div className="lg:col-span-1 flex flex-col gap-6 h-full">
                 <div className="flex flex-col flex-1 min-h-[500px]">
-                  <label className="text-sm font-medium text-gray-300 mb-2 block" htmlFor="product-images">Product Images</label>
+                  <label className="text-sm font-medium text-gray-700 mb-2 block" htmlFor="product-images">Product Images</label>
                   
                   {/* Image List / Preview Area - Takes available space */}
-                  <div className="flex-1 border border-gray-800/60 rounded-lg bg-background-dark p-4 flex flex-col gap-4 overflow-y-auto max-h-[600px]">
+                  <div className="flex-1 border border-gray-200 rounded-lg bg-gray-50 p-4 flex flex-col gap-4 overflow-y-auto max-h-[600px]">
                       
                       {/* Upload Button inside */}
-                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-800/60 border-dashed rounded-lg cursor-pointer hover:bg-white/5 transition-colors flex-shrink-0">
+                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-100 transition-colors flex-shrink-0">
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
                           <span className="material-symbols-outlined text-gray-400 text-3xl"> cloud_upload </span>
-                          <p className="mt-2 text-sm text-gray-400">Click to upload images</p>
+                          <p className="mt-2 text-sm text-gray-500">Click to upload images</p>
                         </div>
                         <input className="hidden" id="dropzone-file" type="file" multiple onChange={handleFileChange} />
                       </label>
@@ -586,7 +586,7 @@ function AddProductSection() {
                       {/* Image List */}
                       {imageList.map((img, index) => (
                           <div key={img.id} className="relative group flex-shrink-0">
-                              <img src={img.url} alt={`Preview ${index}`} className="w-full h-48 object-cover rounded-lg border border-gray-700" />
+                              <img src={img.url} alt={`Preview ${index}`} className="w-full h-48 object-cover rounded-lg border border-gray-200" />
                               <button
                                 type="button"
                                 onClick={() => removeImage(img.id)}
@@ -601,7 +601,7 @@ function AddProductSection() {
                       ))}
                       
                       {imageList.length === 0 && (
-                          <div className="flex-1 flex items-center justify-center text-gray-500 text-sm">
+                          <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">
                               No images uploaded yet.
                           </div>
                       )}
@@ -626,12 +626,12 @@ function AddProductSection() {
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-                <div className="bg-foreground-dark border border-gray-800 rounded-xl p-6 max-w-sm w-full shadow-2xl">
-                    <h3 className="text-xl font-bold text-white mb-2">Delete Product</h3>
-                    <p className="text-gray-400 mb-6">Are you sure you want to delete "{productToDelete?.name}"? This action cannot be undone.</p>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                <div className="bg-white border border-gray-200 rounded-xl p-6 max-w-sm w-full shadow-2xl">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Delete Product</h3>
+                    <p className="text-gray-600 mb-6">Are you sure you want to delete "{productToDelete?.name}"? This action cannot be undone.</p>
                     <div className="flex justify-end gap-3">
-                        <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 rounded-lg bg-gray-700 text-white font-medium hover:bg-gray-600 transition-colors">
+                        <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors">
                             Cancel
                         </button>
                         <button onClick={confirmDelete} className="px-4 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors">
@@ -671,7 +671,7 @@ export default function AdminPage() {
   const ADMIN_UID = "bvBxlNqOpcTQF623WSMkmCInMY53";
 
   if (authLoading) {
-    return <div className="min-h-screen bg-background-dark flex items-center justify-center text-white">Loading...</div>;
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-900">Loading...</div>;
   }
 
   // Authentication check
@@ -685,10 +685,10 @@ export default function AdminPage() {
   // Authorization check
   if (user.uid !== ADMIN_UID) {
     return (
-        <div className="min-h-screen bg-background-dark flex flex-col items-center justify-center text-white gap-4">
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center text-gray-900 gap-4">
             <span className="material-symbols-outlined text-6xl text-red-500">gpp_bad</span>
             <h1 className="text-2xl font-bold">Access Denied</h1>
-            <p className="text-gray-400">You do not have permission to view this page.</p>
+            <p className="text-gray-500">You do not have permission to view this page.</p>
             <button 
                 onClick={() => navigate('/')}
                 className="px-6 py-2 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors"
@@ -697,7 +697,7 @@ export default function AdminPage() {
             </button>
             <button 
                 onClick={handleLogout}
-                className="text-sm text-gray-500 hover:text-white transition-colors"
+                className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
             >
                 Sign Out
             </button>
@@ -706,42 +706,30 @@ export default function AdminPage() {
   }
 
   return (
-    <div className='bg-background-dark font-display text-gray-300'>
+    <div className='bg-gray-50 font-display text-gray-600'>
       <div className='relative flex min-h-screen w-full'>
-        <aside className='sticky top-0 h-screen w-64 flex-shrink-0 bg-[#111318] p-4 flex flex-col justify-between'>
+        <aside className='sticky top-0 h-screen w-64 flex-shrink-0 bg-white border-r border-gray-200 p-4 flex flex-col justify-between'>
           <div className='flex flex-col gap-8'>
             <div className='flex items-center gap-3 px-3'>
-              <img src="/logo-streetwear.webp" alt="Streetwear Crib" className="h-8 w-42 object-contain dark:invert dark:hue-rotate-[60deg] dark:saturate-150 dark:brightness-110" />
+              <img src="/reds-logo.png" alt="Streetwear Crib" className="h-20 w-42 object-contain" />
             </div>
             <div className='flex flex-col gap-2'>
-              <a className='flex items-center gap-3 px-3 py-2 rounded-lg bg-card-dark text-white' href='#'>
+              <a className='flex items-center gap-3 px-3 py-2 rounded-lg bg-gray-100 text-gray-900' href='#'>
                 <span className='material-symbols-outlined'> inventory_2 </span>
                 <p className='text-sm font-medium leading-normal'>Products</p>
-              </a>
-              <a className='flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:bg-card-dark hover:text-white transition-colors duration-200' href='#'>
-                <span className='material-symbols-outlined'> receipt_long </span>
-                <p className='text-sm font-medium leading-normal'>Orders</p>
-              </a>
-              <a className='flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:bg-card-dark hover:text-white transition-colors duration-200' href='#'>
-                <span className='material-symbols-outlined'> group </span>
-                <p className='text-sm font-medium leading-normal'>Customers</p>
               </a>
             </div>
           </div>
           <div className='flex flex-col gap-2'>
-            <a className='flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:bg-card-dark hover:text-white transition-colors duration-200' href='#'>
-              <span className='material-symbols-outlined'> settings </span>
-              <p className='text-sm font-medium leading-normal'>Settings</p>
-            </a>
-            <div className='border-t border-gray-800/60 my-2'></div>
-            <div className='flex gap-3 items-center px-3 py-2 cursor-pointer hover:bg-card-dark rounded-lg transition-colors' onClick={handleLogout}>
+            <div className='border-t border-gray-200 my-2'></div>
+            <div className='flex gap-3 items-center px-3 py-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-colors' onClick={handleLogout}>
               <div
                 className='bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10'
                 style={{ backgroundImage: `url('${user?.photoURL || "https://placehold.co/100x100?text=User"}')` }}
               ></div>
               <div className='flex flex-col'>
-                <h1 className='text-white text-sm font-medium leading-normal'>{user?.displayName || user?.email?.split('@')[0] || 'Admin'}</h1>
-                <p className='text-gray-400 text-xs font-normal leading-normal'>Sign Out</p>
+                <h1 className='text-gray-900 text-sm font-medium leading-normal'>{user?.displayName || user?.email?.split('@')[0] || 'Admin'}</h1>
+                <p className='text-gray-500 text-xs font-normal leading-normal'>Sign Out</p>
               </div>
             </div>
           </div>
