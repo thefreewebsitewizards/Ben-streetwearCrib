@@ -30,16 +30,19 @@ export default function Products() {
   
   const displayNameBySlug: Record<string, string> = {
     'all-products': 'All Products',
-    'new-arrivals': 'New Arrivals',
     'new-releases': 'New Releases',
     'jordan': 'Jordan',
     'nike': 'Nike',
     'adidas': 'Adidas',
+    'puma': 'Puma',
+    'pre-owned': 'Pre-owned',
+    'other-styles': 'Other Styles',
     'reviews': 'Reviews',
     'hats': 'Hats',
     'watches': 'Watches',
     'shirts': 'Shirts',
     'hoodies': 'Hoodies',
+    'all-sneakers': 'Shoes',
   }
   const heading = (slug && displayNameBySlug[slug]) || 'All Products'
 
@@ -50,7 +53,9 @@ export default function Products() {
             const productsRef = collection(db, 'products');
             let q = query(productsRef);
 
-            if (slug && slug !== 'all-products' && displayNameBySlug[slug]) {
+            if (slug === 'all-sneakers') {
+                q = query(productsRef, where('categories', 'array-contains-any', ['Shoes', 'Sneakers', 'Jordan', 'Nike', 'Adidas', 'Puma', 'Pre-owned', 'Other Styles']));
+            } else if (slug && slug !== 'all-products' && displayNameBySlug[slug]) {
                 // Use array-contains to check if the category is in the categories array
                 q = query(productsRef, where('categories', 'array-contains', displayNameBySlug[slug]));
             }

@@ -62,14 +62,15 @@ export default function Navbar({ onLoginClick }: { onLoginClick?: () => void }) 
 
   return (
     <div className="sticky top-0 z-[1000] w-full">
-      <header className="relative flex items-center justify-between px-4 sm:px-10 lg:px-20 h-20 bg-primary text-white shadow-lg">
+      <header className="relative flex items-center justify-between px-6 sm:px-12 lg:px-40 h-26 bg-primary text-white shadow-lg">
         
-        {/* Left Side (Desktop) / Hamburger (Mobile) */}
+        {/* Left Side (Desktop) / Cart (Mobile) */}
         <div className="flex items-center flex-1 justify-start gap-10">
-            {/* Mobile Menu Button */}
-            <button onClick={() => setMenuOpen(v => !v)} aria-expanded={menuOpen} aria-label="Toggle navigation" className="lg:hidden relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors">
-                <span className="material-symbols-outlined text-xl">{menuOpen ? 'close' : 'menu'}</span>
-            </button>
+            {/* Mobile Cart Button */}
+            <Link to="/cart" aria-label="Open cart" className="lg:hidden relative flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors">
+                <span className="material-symbols-outlined text-xl">shopping_bag</span>
+                {cartCount > 0 && <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-primary text-[10px] font-bold">{cartCount}</span>}
+            </Link>
 
             {/* Desktop Left Links */}
             <div className="hidden lg:flex items-center gap-10">
@@ -77,7 +78,6 @@ export default function Navbar({ onLoginClick }: { onLoginClick?: () => void }) 
                     <Link className="text-sm font-bold uppercase tracking-wider hover:text-red-100 transition-colors" to="/admin">Admin</Link>
                 )}
                 <Link className="text-sm font-bold uppercase tracking-wider hover:text-red-100 transition-colors" to="/products/all-products">All Products</Link>
-                <Link className="text-sm font-bold uppercase tracking-wider hover:text-red-100 transition-colors" to="/products/new-arrivals">New Arrivals</Link>
                 <Link className="text-sm font-bold uppercase tracking-wider hover:text-red-100 transition-colors" to="/products/new-releases">New Releases</Link>
             </div>
         </div>
@@ -85,16 +85,16 @@ export default function Navbar({ onLoginClick }: { onLoginClick?: () => void }) 
         {/* Center Logo - Fits inside navbar */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[1001] flex justify-center pointer-events-none">
              {/* pointer-events-auto wrapper for the link to ensure it's clickable */}
-            <Link to="/" className="pointer-events-auto relative block h-20 flex items-center justify-center">
+            <Link to="/" className="pointer-events-auto relative block h-26 flex items-center justify-center">
                 <img 
-                    src="/reds-logo.jpeg" 
+                    src="/reds-logo2.png" 
                     alt="Redslogo" 
                     className="h-full max-w-none rounded-lg object-contain drop-shadow-sm" 
                 />
             </Link>
         </div>
 
-        {/* Right Side (Desktop) / Cart (Mobile) */}
+        {/* Right Side (Desktop) / Hamburger (Mobile) */}
         <div className="flex items-center flex-1 justify-end gap-10">
              {/* Desktop Right Links */}
              <div className="hidden lg:flex items-center gap-10">
@@ -108,6 +108,9 @@ export default function Navbar({ onLoginClick }: { onLoginClick?: () => void }) 
                             <Link to="/products/jordan" className="px-3 py-2 hover:bg-red-50 hover:text-primary rounded-lg text-sm font-medium transition-colors block">Jordan</Link>
                             <Link to="/products/nike" className="px-3 py-2 hover:bg-red-50 hover:text-primary rounded-lg text-sm font-medium transition-colors block">Nike</Link>
                             <Link to="/products/adidas" className="px-3 py-2 hover:bg-red-50 hover:text-primary rounded-lg text-sm font-medium transition-colors block">Adidas</Link>
+                            <Link to="/products/puma" className="px-3 py-2 hover:bg-red-50 hover:text-primary rounded-lg text-sm font-medium transition-colors block">Puma</Link>
+                            <Link to="/products/pre-owned" className="px-3 py-2 hover:bg-red-50 hover:text-primary rounded-lg text-sm font-medium transition-colors block">Pre-owned</Link>
+                            <Link to="/products/other-styles" className="px-3 py-2 hover:bg-red-50 hover:text-primary rounded-lg text-sm font-medium transition-colors block">Other Styles</Link>
                         </div>
                     </div>
                 </div>
@@ -130,12 +133,16 @@ export default function Navbar({ onLoginClick }: { onLoginClick?: () => void }) 
 
              {/* Cart & Login */}
              <div className="flex items-center gap-4">
-                <Link to="/cart" aria-label="Open cart" className="relative flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors">
+                <Link to="/cart" aria-label="Open cart" className="hidden lg:flex relative h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors">
                     <span className="material-symbols-outlined text-xl">shopping_bag</span>
                     {cartCount > 0 && <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-primary text-[10px] font-bold">{cartCount}</span>}
                 </Link>
                 <button onClick={handleAuthAction} className="hidden lg:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-white text-primary text-sm font-bold leading-normal hover:bg-gray-100 transition-colors shadow-sm">
                     <span className="truncate">{user ? 'Sign Out' : 'Login'}</span>
+                </button>
+                 {/* Mobile Menu Button */}
+                <button onClick={() => setMenuOpen(v => !v)} aria-expanded={menuOpen} aria-label="Toggle navigation" className="lg:hidden relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors">
+                    <span className="material-symbols-outlined text-xl">{menuOpen ? 'close' : 'menu'}</span>
                 </button>
              </div>
         </div>
@@ -152,6 +159,9 @@ export default function Navbar({ onLoginClick }: { onLoginClick?: () => void }) 
               <Link className="flex items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100 text-sm font-medium transition-colors" to="/products/jordan" onClick={() => setMenuOpen(false)}><span>Jordan</span><span className="material-symbols-outlined text-base">chevron_right</span></Link>
               <Link className="flex items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100 text-sm font-medium transition-colors" to="/products/nike" onClick={() => setMenuOpen(false)}><span>Nike</span><span className="material-symbols-outlined text-base">chevron_right</span></Link>
               <Link className="flex items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100 text-sm font-medium transition-colors" to="/products/adidas" onClick={() => setMenuOpen(false)}><span>Adidas</span><span className="material-symbols-outlined text-base">chevron_right</span></Link>
+              <Link className="flex items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100 text-sm font-medium transition-colors" to="/products/puma" onClick={() => setMenuOpen(false)}><span>Puma</span><span className="material-symbols-outlined text-base">chevron_right</span></Link>
+              <Link className="flex items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100 text-sm font-medium transition-colors" to="/products/pre-owned" onClick={() => setMenuOpen(false)}><span>Pre-owned</span><span className="material-symbols-outlined text-base">chevron_right</span></Link>
+              <Link className="flex items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100 text-sm font-medium transition-colors" to="/products/other-styles" onClick={() => setMenuOpen(false)}><span>Other Styles</span><span className="material-symbols-outlined text-base">chevron_right</span></Link>
               <div className="border-t border-gray-200 my-1"></div>
               <p className="px-3 py-1 text-xs font-bold text-text-muted-light uppercase tracking-wider">Gear</p>
               <Link className="flex items-center justify-between rounded-md px-3 py-1.5 hover:bg-gray-100 text-sm font-medium transition-colors" to="/products/hats" onClick={() => setMenuOpen(false)}><span>Hats</span><span className="material-symbols-outlined text-base">chevron_right</span></Link>

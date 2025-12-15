@@ -1,6 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useState } from 'react'
-import CategoryTicker from './components/CategoryTicker'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -18,7 +17,6 @@ function App() {
   const [modal, setModal] = useState<'signin' | 'signup' | null>(null)
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col group/design-root">
-      {!isAdmin && <CategoryTicker />}
       {!isAdmin && <Navbar onLoginClick={() => setModal('signin')} />}
       <Routes>
         <Route path="/" element={<Home />} />

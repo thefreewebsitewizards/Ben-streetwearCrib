@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { db } from '../firebase'
 import { collection, getDocs, query, limit, where } from 'firebase/firestore'
+import Hero from '../components/Hero'
 
 export default function Home() {
   const [carouselItems, setCarouselItems] = useState<any[]>([]);
@@ -229,7 +230,8 @@ export default function Home() {
 
   return (
     <main className="flex flex-col">
-      <section className="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
+      <Hero />
+      <section id="new-arrivals" className="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
         {loading ? (
              <div className="flex justify-center items-center h-64">
                 <p className="text-gray-500">Loading carousel items...</p>
@@ -275,54 +277,78 @@ export default function Home() {
       </section>
 
       <section className="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight px-4 pb-6">Hot Right Now</h2>
+        <div className="mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight pb-4 flex items-center gap-2">
+            Our Collection
+          </h2>
+          <p className="text-gray-500 max-w-3xl text-lg">
+             Discover premium shoes, trend-driven apparel, and timeless watches, carefully selected to match your lifestyle. From streetwear to luxury, everything you need in one place.
+          </p>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div
+          <Link
+            to="/products/hoodies"
             className="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-6 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] group"
-            data-alt="A person wearing chunky sole sneakers walking on a city street"
-            style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZArQirr2R-Xn_6a3qmh-jCbC0P1WvOgzcMRSgRCXRmw7AvFsM__3Gxsy1aGuKzwqG3h69TelvM_iNUQQTvzewdf2VJ6hci72EybQ2O13qPj7EkzhLrH94yJyidLjS-5TJFfg4YxJIc7l7iUb3e8AzgPW4dSYxXRi4aORB9D0vg7JZTbUBG2xSAZN5BWagam6FYRixWJnYIpsJItF8BnA1FWYekxCd0VVXpWTe8eN2mdYLe2_ok1Hn86YwmTevSvfJ8fPpaeOcIG0")' }}
+            data-alt="The Drip Collection"
+            style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("/thedripcollection.webp")' }}
           >
-            <p className="text-white text-xl font-bold leading-tight transform group-hover:translate-y-[-8px] transition-transform duration-300">The Chunky Sole Edit</p>
+            <p className="text-white text-xl font-bold leading-tight transform group-hover:translate-y-[-8px] transition-transform duration-300 flex items-center gap-2">
+              The Drip Collection <span className="material-symbols-outlined">arrow_forward</span>
+            </p>
+          </Link>
+          <Link
+            to="/products/watches"
+            className="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-6 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] group"
+            data-alt="Watches"
+            style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("/watches.webp")' }}
+          >
+            <p className="text-white text-xl font-bold leading-tight transform group-hover:translate-y-[-8px] transition-transform duration-300 flex items-center gap-2">
+              Watches <span className="material-symbols-outlined">arrow_forward</span>
+            </p>
+          </Link>
+          <Link
+            to="/products/all-sneakers"
+            className="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-6 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] group"
+            data-alt="Solo Drip"
+            style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("/solodrip.webp")' }}
+          >
+            <p className="text-white text-xl font-bold leading-tight transform group-hover:translate-y-[-8px] transition-transform duration-300 flex items-center gap-2">
+              Solo Drip <span className="material-symbols-outlined">arrow_forward</span>
+            </p>
+          </Link>
+        </div>
+      </section>
+
+      <section className="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
+        <div className="flex flex-col md:flex-row gap-8 items-center bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+          <div className="w-full md:w-1/2 h-[500px] md:h-[600px] relative bg-gray-50 flex items-center justify-center">
+            <img 
+              src="/banner.jpeg" 
+              alt="New Collection Arriving This Fall" 
+              className="absolute inset-0 w-full h-full object-contain object-center"
+            />
           </div>
-          <div
-            className="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-6 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] group"
-            data-alt="A pair of white minimalist high-top sneakers against a concrete wall"
-            style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDNMMrcJYmeQRHnpyFiKlhpl7vk8ry8Xi9bIeItdygPtlEDifIVeWPZPdQhuL-F-a4HJjC5DRUt_l9Glt1sncoD3naKji5NR9aNRv9XX1F5TMX183Cdyrs2di0b74N9jBKzRCqMPd-_F46F4uXNBBN8lxbgEVQFBvudqH6jSi_AiXAnpV0T7hOVVTPLY7nW01HBZL8PsNNKM5ecN13X_AX1RzL6Km4g8dppWjfWNivYi0hqLGaf8IpuJS5kErWX-AGl7l-fEtZtcro")' }}
-          >
-            <p className="text-white text-xl font-bold leading-tight transform group-hover:translate-y-[-8px] transition-transform duration-300">Minimalist High-Tops</p>
-          </div>
-          <div
-            className="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-6 aspect-[4/5] sm:aspect-square lg:aspect-[4/5] group"
-            data-alt="Close-up on the side of a colorful retro runner sneaker"
-            style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 40%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAAo4m08Q5nou8YgL0Mne7eJL0aZOZ5yXs36sBT_y47xE1YHEaU0zKHSzrDPxSbRR6qsj47hP073kJWpkFpjQjN9LK77jsGitnWGd3dPgxum5IVG7mBPSrzpJNKXj8nDWfOokEQMaKiFk7T1ZtQX9pdVs5tTXTVKsBhvSd3Eor_pyHFZ_fUYY2dyunTJSqGEkUxQr2qyjAr3ILv0Bbc2DVd5B9Tgvs8EyDvQLmJc1zumwNAlsW_ux5wIEocCrspa1DDb_JSAM34_f0")' }}
-          >
-            <p className="text-white text-xl font-bold leading-tight transform group-hover:translate-y-[-8px] transition-transform duration-300">Retro Runners</p>
+          <div className="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center items-start gap-6">
+            <h3 className="text-black text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight flex items-center gap-2">
+              Step Into the Future 
+            </h3>
+            <p className="text-gray-600 text-lg leading-relaxed">
+              Explore our exclusive range of high-performance sneakers designed for comfort and style. Find your perfect pair today.
+            </p>
+            <Link 
+              to="/products/all-sneakers"
+              className="flex items-center justify-center px-8 py-4 bg-primary text-white text-lg font-bold rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 transform hover:-translate-y-1"
+            >
+              Shop Shoes
+            </Link>
           </div>
         </div>
       </section>
 
       <section className="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
-        <div className="@container">
-          <div
-            className="bg-cover bg-center flex flex-col justify-end overflow-hidden min-h-[300px] sm:min-h-[400px] rounded-xl"
-            data-alt="Artistic close-up shot of a beige sneaker showing texture and material details"
-            style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 35%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuADtpo7l4d56IBJbGfFQjXJvKu4_nnJ1bC9ei8HWy5W5Hn6xiIM4V8DGMoS-hlSPbVJrNibuPheFt7LFPUutn8EwM0txUMcYw2c1cDQpL_K5a2R7EYyjDCU2vJLFvlsr8x_BZiM-l7INqbsrGMxcKjioFUfftHuajie_AqAPxP_D4BeEXvUu0kdsxevdihZzNKmn8N5scwLYlWB4qjvSXL5k3QnVs9Zir_-AIYATV8JHwNLtrOnNGl6vXFbBsldH2LB4h16yw90p5Y")' }}
-          >
-            <div className="flex flex-col p-6 sm:p-10 gap-4">
-              <h3 className="text-primary text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight max-w-xl">New Collection Arriving This Fall</h3>
-              <p className="text-text-light text-base sm:text-lg max-w-lg">Experience the next wave of design innovation. Timeless aesthetics meet cutting-edge comfort.</p>
-              <div className="pt-2">
-                <button className="flex min-w-[84px] max-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-red-400 transition-colors">
-                  <span className="truncate">Explore Now</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="w-full px-4 sm:px-10 lg:px-20 py-10 md:py-16">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight px-4 pb-6">Best Selling</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight px-4 pb-6 flex items-center gap-2">
+          Best Selling <span className="material-symbols-outlined">arrow_forward</span>
+        </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {bestSellingProducts.length > 0 ? (
             bestSellingProducts.map((product) => (

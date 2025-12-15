@@ -327,7 +327,9 @@ export default function ProductDetails() {
           </section>
           <section className="py-16 bg-white">
             <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <h2 className="text-3xl font-bold text-center text-slate-800 mb-8">You Might Also Like</h2>
+              <h2 className="text-3xl font-bold text-center text-slate-800 mb-8 flex items-center justify-center gap-2">
+                You Might Also Like <span className="material-symbols-outlined">arrow_forward</span>
+              </h2>
               <div className="flex overflow-x-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <div className="flex items-stretch p-4 gap-6">
                   {relatedProducts.map((r) => (

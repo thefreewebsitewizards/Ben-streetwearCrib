@@ -103,11 +103,13 @@ const AVAILABLE_SIZES = ['US 7', 'US 7.5', 'US 8', 'US 8.5', 'US 9', 'US 9.5', '
 
 const AVAILABLE_CATEGORIES = [
   'All Products',
-  'New Arrivals',
   'New Releases',
   'Jordan',
   'Nike',
   'Adidas',
+  'Puma',
+  'Pre-owned',
+  'Other Styles',
   'Hats',
   'Watches',
   'Shirts',
